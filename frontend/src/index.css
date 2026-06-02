@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* =============================================
+   PRO-SPORT Design Tokens (unlayered — always available)
+   ============================================= */
+:root {
+  --color-primary: #00c8aa;
+  --color-primary-dark: #009e87;
+  --color-primary-light: #00e5c5;
+  --color-dark: #0a0e1a;
+  --color-dark-2: #111827;
+  --color-dark-3: #1a2235;
+  --color-dark-card: #141c2e;
+  --color-text: #1a2035;
+  --color-text-light: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-white: #ffffff;
+  --color-border: #e2e8f0;
+  --color-bg: #f0f4f8;
+  --color-bg-card: #ffffff;
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+  --shadow-glow: 0 0 24px rgba(0,200,170,0.25);
+  --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Animations (unlayered — always available) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,200,170,0.35); }
+  50%       { box-shadow: 0 0 0 12px rgba(0,200,170,0); }
+}
+
+/* =============================================
+   Base Styles (inside @layer so Tailwind utilities can override)
+   ============================================= */
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background: var(--color-white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  button {
+    font-family: var(--font-body);
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+}
+
+/* =============================================
+   Component Styles (inside @layer so utilities can override)
+   ============================================= */
+@layer components {
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
+  }
+
+  .section-subtitle {
+    color: var(--color-text-light);
+    font-size: 0.97rem;
+    margin-top: 8px;
+  }
+
+  .animate-fade-up { animation: fadeInUp 0.6s ease both; }
+  .animate-fade    { animation: fadeIn   0.5s ease both; }
+
+  /* ---- Buttons ---- */
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-text);
+    border: 1.5px solid var(--color-border);
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: border-color var(--transition), color var(--transition), background var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background: rgba(0,200,170,0.06);
+  }
+
+
+
+  /* ---- Legacy Form Styles (for non-migrated pages) ---- */
+  .form-group { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .form-label { font-size: 0.825rem; font-weight: 600; color: var(--color-text); }
+
+  .input-wrap { position: relative; display: flex; align-items: center; }
+  .input-icon { position: absolute; left: 14px; color: var(--color-text-muted); pointer-events: none; }
+
+  .form-input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    background: var(--color-white);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+  }
+  .form-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0,200,170,0.12);
+  }
+  .form-input::placeholder { color: var(--color-text-muted); }
+
+
+}
