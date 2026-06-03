@@ -1,0 +1,85 @@
+/* ApexMatchesPage.css */
+.apex-matches { max-width: 900px; }
+
+.match-hero {
+  background: linear-gradient(135deg, #e8f7f5, #d0eff8);
+  border-radius: 16px; padding: 28px 32px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.match-hero__title { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: #0d2d3a; margin-bottom: 4px; }
+.match-hero__sub { font-size: 0.9rem; color: #64748b; }
+.match-hero__create { white-space: nowrap; }
+
+.match-tabs { display: flex; gap: 4px; background: white; border-radius: 12px; padding: 6px; border: 1px solid #e0ecf0; margin-bottom: 20px; width: fit-content; }
+.match-tab { padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #64748b; background: transparent; cursor: pointer; transition: all 0.2s; border: none; }
+.match-tab.active { background: #0fc8b5; color: white; }
+.match-tab:hover:not(.active) { background: rgba(15,200,181,0.08); color: #0fc8b5; }
+
+.match-filters { display: flex; gap: 12px; margin-bottom: 16px; }
+.match-filter-select {
+  padding: 8px 14px; border-radius: 8px; font-size: 0.85rem;
+  border: 1.5px solid #e0ecf0; background: white; color: #0d2d3a;
+  outline: none; cursor: pointer; transition: border-color 0.2s;
+}
+.match-filter-select:focus { border-color: #0fc8b5; }
+
+.matches-list { display: flex; flex-direction: column; gap: 12px; }
+.match-card {
+  background: white; border-radius: 14px; border: 1px solid #e0ecf0;
+  padding: 18px 20px; display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: box-shadow 0.2s, transform 0.2s;
+}
+.match-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+
+.match-card__sport { font-size: 2rem; flex-shrink: 0; }
+.match-card__info { flex: 1; }
+.match-card__top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.match-card__name { font-size: 0.95rem; font-weight: 700; color: #0d2d3a; }
+.match-level { font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+.match-level--beginner { background: rgba(34,197,94,0.1); color: #22c55e; }
+.match-level--intermediate { background: rgba(245,158,11,0.1); color: #f59e0b; }
+.match-level--advanced { background: rgba(239,68,68,0.1); color: #ef4444; }
+.match-level--pro { background: rgba(99,102,241,0.1); color: #6366f1; }
+.match-level--confirmed { background: rgba(15,200,181,0.1); color: #0fc8b5; }
+
+.match-card__meta { display: flex; gap: 16px; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; flex-wrap: wrap; }
+.match-card__host { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #64748b; }
+.match-host__avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+
+.match-card__right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+.match-slots { text-align: center; }
+.match-slots__num { display: block; font-size: 1.2rem; font-weight: 700; color: #0d2d3a; }
+.match-slots__label { font-size: 0.7rem; color: #94a3b8; }
+
+.match-join-btn { font-size: 0.82rem; padding: 8px 18px; white-space: nowrap; }
+.match-join-btn.joined { background: #22c55e; }
+
+.match-empty { text-align: center; padding: 60px 20px; background: white; border-radius: 14px; border: 1px solid #e0ecf0; }
+.match-empty span { font-size: 3rem; display: block; margin-bottom: 12px; }
+.match-empty p { color: #94a3b8; margin-bottom: 16px; }
+
+/* History */
+.match-result { font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+.result--won { background: rgba(34,197,94,0.1); color: #22c55e; }
+.result--lost { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+.match-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-top: 20px;
+}
+.stat-card {
+  background: white; border-radius: 12px; border: 1px solid #e0ecf0;
+  padding: 16px; text-align: center;
+}
+.stat-card__num { display: block; font-size: 1.6rem; font-weight: 700; color: #0d2d3a; }
+.stat-card__label { font-size: 0.78rem; color: #94a3b8; }
+.stat-card--won .stat-card__num { color: #22c55e; }
+.stat-card--lost .stat-card__num { color: #ef4444; }
+
+@media (max-width: 700px) {
+  .match-card { flex-wrap: wrap; }
+  .match-card__right { flex-direction: row; width: 100%; justify-content: space-between; }
+  .match-stats { grid-template-columns: repeat(2, 1fr); }
+  .match-tabs { flex-wrap: wrap; }
+}

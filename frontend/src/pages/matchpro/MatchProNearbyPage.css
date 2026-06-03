@@ -1,0 +1,251 @@
+/* MatchProNearbyPage.css */
+
+.mp-nearby-content {
+  flex: 1;
+}
+
+.mp-nearby-header {
+  margin-bottom: 20px;
+}
+
+.mp-nearby-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--mp-dark);
+  margin-bottom: 4px;
+}
+
+.mp-nearby-sub {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+/* Map Hero */
+.mp-map-hero {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: linear-gradient(135deg, #e8f4f8 0%, #d4edf5 50%, #c8e8f0 100%);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid var(--mp-border);
+}
+
+/* Grid overlay to simulate map */
+.mp-map-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(#ffffff40 0 1px, transparent 1px 100%),
+    repeating-linear-gradient(90deg, #ffffff40 0 1px, transparent 1px 100%);
+  background-size: 40px 40px;
+  opacity: 0.7;
+}
+
+.mp-map-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.mp-map-search {
+  display: flex;
+  gap: 10px;
+  background: white;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.mp-map-input {
+  flex: 1;
+  border: none;
+  background: #f8fafc;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--mp-dark);
+  outline: none;
+}
+
+.mp-map-select {
+  border: none;
+  background: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--mp-dark);
+  outline: none;
+  cursor: pointer;
+}
+
+.mp-map-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* Map Pins */
+.mp-map-pin {
+  position: absolute;
+  font-size: 1.5rem;
+  transform: translate(-50%, -100%);
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+  cursor: pointer;
+  transition: transform 0.2s;
+  z-index: 5;
+}
+
+.mp-map-pin:hover {
+  transform: translate(-50%, -110%) scale(1.1);
+  z-index: 6;
+}
+
+.mp-map-pin--user {
+  background: white;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--mp-primary);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--mp-primary);
+}
+.mp-map-pin--user:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+/* Venues Grid */
+.mp-venues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.mp-venue-card {
+  background: white;
+  border-radius: 14px;
+  border: 1.5px solid var(--mp-border);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mp-venue-card:hover {
+  border-color: var(--mp-primary-light);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+}
+
+.mp-venue-card.active {
+  border-color: var(--mp-primary);
+  background: #f4fbfb;
+}
+
+.mp-venue-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mp-venue-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f0f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.mp-venue-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--mp-dark);
+  margin-bottom: 2px;
+}
+
+.mp-venue-sport {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.mp-venue-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.mp-venue-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f0f5f9;
+  padding-top: 12px;
+}
+
+.mp-venue-active {
+  font-size: 0.8rem;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.mp-venue-btn {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+/* Pickup Games */
+.mp-pickup-game {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f5f9;
+}
+.mp-pickup-game:last-child {
+  border-bottom: none;
+}
+.mp-pickup-icon {
+  font-size: 1.5rem;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 10px;
+}
+.mp-pickup-info {
+  flex: 1;
+}
+.mp-pickup-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--mp-dark);
+}
+.mp-pickup-meta {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+.mp-pickup-join {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .mp-map-search {
+    flex-direction: column;
+  }
+}

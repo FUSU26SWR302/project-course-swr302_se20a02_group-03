@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ProSport.API/ProSport.API.csproj" />
+  <Project Path="ProSport.Application/ProSport.Application.csproj" />
+  <Project Path="ProSport.Domain/ProSport.Domain.csproj" />
+  <Project Path="ProSport.Infrastructure/ProSport.Infrastructure.csproj" />
+</Solution>

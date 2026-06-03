@@ -1,0 +1,84 @@
+/* ApexSupportPage.css */
+.apex-support { max-width: 960px; }
+
+.support-hero {
+  text-align: center; padding: 40px 32px;
+  background: linear-gradient(135deg, #e8f7f5, #d0eff8);
+  border-radius: 16px; margin-bottom: 24px;
+}
+.support-hero__icon { font-size: 3rem; margin-bottom: 10px; }
+.support-hero__title { font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700; color: #0d2d3a; margin-bottom: 6px; }
+.support-hero__sub { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
+.support-hero__search {
+  display: flex; align-items: center; gap: 10px;
+  background: white; border: 1.5px solid #e0ecf0; border-radius: 100px;
+  padding: 10px 20px; max-width: 420px; margin: 0 auto;
+  transition: border-color 0.2s;
+}
+.support-hero__search:focus-within { border-color: #0fc8b5; }
+.support-hero__search input { flex: 1; border: none; outline: none; font-size: 0.875rem; font-family: inherit; color: #0d2d3a; background: transparent; }
+
+/* Quick actions */
+.support-quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+.support-quick-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: white; border-radius: 12px; border: 1px solid #e0ecf0;
+  padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+  font-size: 0.875rem; font-weight: 600; color: #0d2d3a;
+}
+.support-quick-btn:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,0.08); transform: translateY(-2px); }
+.support-quick-btn__icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+
+/* Grid */
+.support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.support-section-title { font-size: 1rem; font-weight: 700; color: #0d2d3a; margin-bottom: 14px; }
+
+/* FAQ */
+.faq-list { display: flex; flex-direction: column; gap: 8px; }
+.faq-item {
+  background: white; border-radius: 10px; border: 1px solid #e0ecf0;
+  overflow: hidden; transition: box-shadow 0.2s;
+}
+.faq-item--open { box-shadow: 0 4px 14px rgba(15,200,181,0.1); border-color: #0fc8b5; }
+.faq-item__question {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; text-align: left; font-size: 0.875rem; font-weight: 600;
+  color: #0d2d3a; background: transparent; cursor: pointer; border: none; gap: 12px;
+  transition: background 0.2s;
+}
+.faq-item__question:hover { background: #f8fafc; }
+.faq-item--open .faq-item__question { color: #0fc8b5; }
+.faq-item__arrow { font-size: 0.7rem; color: #94a3b8; flex-shrink: 0; }
+.faq-item__answer { padding: 0 16px 14px; font-size: 0.875rem; color: #64748b; line-height: 1.6; }
+
+/* Contact */
+.support-contact {
+  background: white; border-radius: 14px; border: 1px solid #e0ecf0; padding: 22px;
+}
+.support-form { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+.support-field { display: flex; flex-direction: column; gap: 5px; }
+.support-field label { font-size: 0.8rem; font-weight: 600; color: #64748b; }
+.support-input {
+  border: 1.5px solid #e0ecf0; border-radius: 8px; padding: 9px 12px;
+  font-size: 0.875rem; color: #0d2d3a; background: #f8fafc;
+  outline: none; font-family: inherit; transition: border-color 0.2s;
+}
+.support-input:focus { border-color: #0fc8b5; }
+.support-textarea { resize: vertical; }
+.support-submit { align-self: flex-start; }
+
+.support-success {
+  text-align: center; padding: 32px; background: rgba(34,197,94,0.06);
+  border-radius: 10px; border: 1px solid #bbf7d0; margin-bottom: 16px;
+}
+.support-success span { font-size: 2rem; display: block; margin-bottom: 8px; }
+.support-success p { color: #22c55e; font-weight: 600; }
+
+.support-contact-info { border-top: 1px solid #f0f5f9; padding-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.contact-info-item { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; color: #64748b; }
+.contact-info-item span:first-child { font-size: 1.1rem; }
+
+@media (max-width: 700px) {
+  .support-quick { grid-template-columns: repeat(2, 1fr); }
+  .support-grid { grid-template-columns: 1fr; }
+}
