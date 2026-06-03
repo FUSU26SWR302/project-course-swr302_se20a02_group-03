@@ -1,6 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/e_CNHJva)
 
-https://vyho0509.atlassian.net/jira/software/projects/KAN/list?jql=project+%3D+KAN+ORDER+BY+cf%5B10019%5D+ASC&atlOrigin=eyJpIjoiZWRlNzA4MmQ2OTVhNDEzM2I5YmJkNmI5MGUxMzJhMWQiLCJwIjoiaiJ9
+https://vyho0509.atlassian.net/?continue=https%3A%2F%2Fvyho0509.atlassian.net%2Fwelcome%2Fsoftware%3FprojectId%3D10033&atlOrigin=eyJpIjoiM2UzNWEzZjRhZjYxNGM5OGE4Mzc0OGQ5YjYyY2U4MTQiLCJwIjoiamlyYS1zb2Z0d2FyZSJ9
 
 # Pro-Sport Complex Management System with AI
 
