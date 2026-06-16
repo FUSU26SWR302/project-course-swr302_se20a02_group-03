@@ -1,21 +1,21 @@
 -- ============================================================================
--- PRO-SPORT COMPLEX � Database Schema Script
+-- PRO-SPORT COMPLEX — Database Schema Script
 -- Target: Microsoft SQL Server 2019+
--- Encoding: UTF-8 (h? tr? NVARCHAR cho ti?ng Vi?t)
+-- Encoding: UTF-8 (hỗ trợ NVARCHAR cho tiếng Việt)
 -- Author: Senior Database Engineer (AI-Assisted)
 -- Date: 2026-05-26
 -- ============================================================================
--- H??NG D?N: Copy to�n b? script n�y v� ch?y tr�n SSMS (SQL Server Management Studio).
--- Script s? t?o database ProSportDB v� to�n b? 12 b?ng theo ?�ng th? t? dependency.
+-- HƯỚNG DẪN: Copy toàn bộ script này và chạy trên SSMS (SQL Server Management Studio).
+-- Script sẽ tạo database ProSportDB và toàn bộ 12 bảng theo đúng thứ tự dependency.
 -- ============================================================================
 
 -- ============================================================================
--- PH?N 1: T?O DATABASE
+-- PHẦN 1: TẠO DATABASE
 -- ============================================================================
 USE [master];
 GO
 
--- X�a database c? n?u t?n t?i (CH? D�NG KHI PH�T TRI?N)
+-- Xóa database cũ nếu tồn tại (CHỈ DÙNG KHI PHÁT TRIỂN)
 IF EXISTS (SELECT name FROM sys.databases WHERE name = N'ProSportDB')
 BEGIN
     ALTER DATABASE [ProSportDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
@@ -36,27 +36,29 @@ GO
 
 
 -- ============================================================================
--- PH?N 2: T?O C�C B?NG (theo th? t? dependency � b?ng cha tr??c, b?ng con sau)
+-- PHẦN 2: TẠO CÁC BẢNG (theo thứ tự dependency — bảng cha trước, bảng con sau)
 -- ============================================================================
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 1: QU?N L� T�I KHO?N & ??NH DANH
--- ????????????????????????????????????????????????????????????????????????????
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 1: QUẢN LÝ TÀI KHOẢN & ĐỊNH DANH
+-- ────────────────────────────────────────────────────────────────────────────
 
--- B?ng 1: Users � T�i kho?n ng??i d�ng
+-- Bảng 1: Users — Tài khoản người dùng
 CREATE TABLE [dbo].[Users]
 (
-    [UserId]        INT             IDENTITY(1,1)   NOT NULL,
-    [FullName]      NVARCHAR(100)   NOT NULL,
-    [Email]         VARCHAR(255)    NOT NULL,
-    [PasswordHash]  VARCHAR(500)    NOT NULL,
-    [PhoneNumber]   VARCHAR(15)     NULL,
-    [Role]          VARCHAR(20)     NOT NULL,
-    [EKycStatus]    VARCHAR(20)     NOT NULL    CONSTRAINT [DF_Users_EKycStatus]    DEFAULT ('Unverified'),
-    [AvatarUrl]     VARCHAR(500)    NULL,
-    [IsDeleted]     BIT             NOT NULL    CONSTRAINT [DF_Users_IsDeleted]     DEFAULT (0),
-    [CreatedAt]     DATETIME2(7)    NOT NULL    CONSTRAINT [DF_Users_CreatedAt]     DEFAULT (SYSDATETIME()),
-    [UpdatedAt]     DATETIME2(7)    NULL,
+    [UserId]            INT             IDENTITY(1,1)   NOT NULL,
+    [FullName]          NVARCHAR(100)   NOT NULL,
+    [Email]             VARCHAR(255)    NOT NULL,
+    [PasswordHash]      VARCHAR(500)    NULL,
+    [PhoneNumber]       VARCHAR(15)     NULL,
+    [Role]              VARCHAR(20)     NOT NULL,
+    [EKycStatus]        VARCHAR(20)     NOT NULL    CONSTRAINT [DF_Users_EKycStatus]        DEFAULT ('Unverified'),
+    [AvatarUrl]         VARCHAR(500)    NULL,
+    [GoogleId]          VARCHAR(100)    NULL,
+    [IsPhoneVerified]   BIT             NOT NULL    CONSTRAINT [DF_Users_IsPhoneVerified]   DEFAULT (0),
+    [IsDeleted]         BIT             NOT NULL    CONSTRAINT [DF_Users_IsDeleted]         DEFAULT (0),
+    [CreatedAt]         DATETIME2(7)    NOT NULL    CONSTRAINT [DF_Users_CreatedAt]         DEFAULT (SYSDATETIME()),
+    [UpdatedAt]         DATETIME2(7)    NULL,
 
     CONSTRAINT [PK_Users]               PRIMARY KEY CLUSTERED ([UserId]),
     CONSTRAINT [UQ_Users_Email]         UNIQUE ([Email]),
@@ -65,7 +67,13 @@ CREATE TABLE [dbo].[Users]
 );
 GO
 
--- B?ng 2: EscrowWallets � V� k� qu? (quan h? 1:1 v?i Users)
+-- Unique Index cho GoogleId (nếu khác NULL)
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Users_GoogleId]
+ON [dbo].[Users] ([GoogleId])
+WHERE [GoogleId] IS NOT NULL;
+GO
+
+-- Bảng 2: EscrowWallets — Ví ký quỹ (quan hệ 1:1 với Users)
 CREATE TABLE [dbo].[EscrowWallets]
 (
     [WalletId]      INT             IDENTITY(1,1)   NOT NULL,
@@ -85,11 +93,11 @@ CREATE TABLE [dbo].[EscrowWallets]
 );
 GO
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 2: QU?N L� S�N B�I & GI� ??NG
--- ????????????????????????????????????????????????????????????????????????????
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 2: QUẢN LÝ SÂN BÃI & GIÁ ĐỘNG
+-- ────────────────────────────────────────────────────────────────────────────
 
--- B?ng 3: Courts � S�n b�i
+-- Bảng 3: Courts — Sân bãi
 CREATE TABLE [dbo].[Courts]
 (
     [CourtId]       INT             IDENTITY(1,1)   NOT NULL,
@@ -108,7 +116,7 @@ CREATE TABLE [dbo].[Courts]
 );
 GO
 
--- B?ng 4: TimeSlots � Khung gi? ho?t ??ng c? ??nh
+-- Bảng 4: TimeSlots — Khung giờ hoạt động cố định
 CREATE TABLE [dbo].[TimeSlots]
 (
     [SlotId]        INT             IDENTITY(1,1)   NOT NULL,
@@ -122,7 +130,7 @@ CREATE TABLE [dbo].[TimeSlots]
 );
 GO
 
--- B?ng 5: PriceMatrix � Ma tr?n gi� ??ng (S�n � Khung gi? � Lo?i ng�y)
+-- Bảng 5: PriceMatrix — Ma trận giá động (Sân × Khung giờ × Loại ngày)
 CREATE TABLE [dbo].[PriceMatrix]
 (
     [PriceId]       INT             IDENTITY(1,1)   NOT NULL,
@@ -144,19 +152,19 @@ CREATE TABLE [dbo].[PriceMatrix]
 );
 GO
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 3: QU?N L� THI?T B? & M� H�NH "TRY-BEFORE-YOU-BUY"
--- ????????????????????????????????????????????????????????????????????????????
--- M� h�nh: Kh�ch thu� v?t ? th? ? th�ch ? MUA C�Y M?I c�ng m?u (l?y t? SalesStock).
---          C�y v?t cho thu� ???c TR? L?I kho thu�, ti?p t?c cho kh�ch kh�c thu�.
---          Khi 1 c�y ??t 20 l?n thu� ? chuy?n sang kho thanh l� (?? c?).
--- HAI KHO T�CH BI?T:
---   � RentalStock = s? c�y v?t v?t l� d�ng cho thu� (chi ti?t ? b?ng EquipmentUnits)
---   � SalesStock  = s? c�y v?t M?I NGUY�N H?P d�ng ?? b�n cho kh�ch mu?n mua ??t
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 3: QUẢN LÝ THIẾT BỊ & MÔ HÌNH "TRY-BEFORE-YOU-BUY"
+-- ────────────────────────────────────────────────────────────────────────────
+-- Mô hình: Khách thuê vợt → thử → thích → MUA CÂY MỚI cùng mẫu (lấy từ SalesStock).
+--          Cây vợt cho thuê được TRẢ LẠI kho thuê, tiếp tục cho khách khác thuê.
+--          Khi 1 cây đạt 20 lần thuê → chuyển sang kho thanh lý (đồ cũ).
+-- HAI KHO TÁCH BIỆT:
+--   • RentalStock = số cây vợt vật lý dùng cho thuê (chi tiết ở bảng EquipmentUnits)
+--   • SalesStock  = số cây vợt MỚI NGUYÊN HỘP dùng để bán cho khách muốn mua đứt
 
--- B?ng 6: Equipments � Danh m?c m?u v?t (catalog level)
--- RetailPrice = Gi� b�n l? g?c c�y v?t m?i
--- RentalPrice = Computed column = 5% RetailPrice (gi� thu� m?c ??nh/ng�y)
+-- Bảng 6: Equipments — Danh mục mẫu vợt (catalog level)
+-- RetailPrice = Giá bán lẻ gốc cây vợt mới
+-- RentalPrice = Computed column = 5% RetailPrice (giá thuê mặc định/ngày)
 CREATE TABLE [dbo].[Equipments]
 (
     [EquipmentId]       INT             IDENTITY(1,1)   NOT NULL,
@@ -180,11 +188,11 @@ CREATE TABLE [dbo].[Equipments]
 );
 GO
 
--- B?ng 6b: EquipmentUnits � T?ng c�y v?t v?t l� trong KHO CHO THU� (unit level)
--- M?i b?n ghi = 1 c�y v?t th?c t? d�ng ?? cho thu�, ???c nhi?u kh�ch thu� lu�n phi�n.
--- Sau m?i l?n thu� xong ? c�y v?t tr? l?i kho thu� ? RentalCount += 1.
--- Khi RentalCount >= 20 ? Application chuy?n Status ? 'Liquidated' (kho thanh l� ?? c?).
--- L?U �: ?�y KH�NG ph?i v?t m?i b�n cho kh�ch. V?t b�n l?y t? SalesStock c?a Equipments.
+-- Bảng 6b: EquipmentUnits — Từng cây vợt vật lý trong KHO CHO THUÊ (unit level)
+-- Mỗi bản ghi = 1 cây vợt thực tế dùng để cho thuê, được nhiều khách thuê luân phiên.
+-- Sau mỗi lần thuê xong → cây vợt trả lại kho thuê → RentalCount += 1.
+-- Khi RentalCount >= 20 → Application chuyển Status → 'Liquidated' (kho thanh lý đồ cũ).
+-- LƯU Ý: Đây KHÔNG phải vợt mới bán cho khách. Vợt bán lấy từ SalesStock của Equipments.
 CREATE TABLE [dbo].[EquipmentUnits]
 (
     [UnitId]            INT             IDENTITY(1,1)   NOT NULL,
@@ -208,11 +216,11 @@ CREATE TABLE [dbo].[EquipmentUnits]
 );
 GO
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 4: LU?NG ??T S�N & THU� V?T
--- ????????????????????????????????????????????????????????????????????????????
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 4: LUỒNG ĐẶT SÂN & THUÊ VỢT
+-- ────────────────────────────────────────────────────────────────────────────
 
--- B?ng 7: Bookings � ??n ??t s�n
+-- Bảng 7: Bookings — Đơn đặt sân
 CREATE TABLE [dbo].[Bookings]
 (
     [BookingId]     INT             IDENTITY(1,1)   NOT NULL,
@@ -243,13 +251,13 @@ CREATE TABLE [dbo].[Bookings]
 );
 GO
 
--- Index l?c: Ch?ng tr�ng l?ch ??t s�n (cho ph�p nhi?u b?n ghi Cancelled tr�n c�ng slot)
+-- Index lọc: Chống trùng lịch đặt sân (cho phép nhiều bản ghi Cancelled trên cùng slot)
 CREATE UNIQUE NONCLUSTERED INDEX [UX_Bookings_NoDuplicate]
 ON [dbo].[Bookings] ([CourtId], [SlotId], [BookingDate])
 WHERE [Status] <> 'Cancelled';
 GO
 
--- B?ng 8: BookingDetails_Equipments � Chi ti?t thu� v?t ?i k�m Booking
+-- Bảng 8: BookingDetails_Equipments — Chi tiết thuê vợt đi kèm Booking
 CREATE TABLE [dbo].[BookingDetails_Equipments]
 (
     [DetailId]      INT             IDENTITY(1,1)   NOT NULL,
@@ -275,14 +283,14 @@ CREATE TABLE [dbo].[BookingDetails_Equipments]
 );
 GO
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 4b: VOUCHER "TRY-BEFORE-YOU-BUY"
--- ????????????????????????????????????????????????????????????????????????????
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 4b: VOUCHER "TRY-BEFORE-YOU-BUY"
+-- ────────────────────────────────────────────────────────────────────────────
 
--- B?ng 8b: Vouchers � Voucher kh?u tr? khi mua C�Y M?I c�ng m?u ?� thu�
--- Sinh t? ??ng khi confirm thu� v?t, gi� tr? = s? ti?n thu�, hi?u l?c 24h.
--- Khi d�ng voucher ? tr? gi� v�o RetailPrice ? l?y 1 c�y M?I t? SalesStock (KH�NG b�n c�y v?a thu�).
--- C�y thu� ???c tr? l?i kho cho thu� (EquipmentUnits), ti?p t?c cho kh�ch kh�c thu�.
+-- Bảng 8b: Vouchers — Voucher khấu trừ khi mua CÂY MỚI cùng mẫu đã thuê
+-- Sinh tự động khi confirm thuê vợt, giá trị = số tiền thuê, hiệu lực 24h.
+-- Khi dùng voucher → trừ giá vào RetailPrice → lấy 1 cây MỚI từ SalesStock (KHÔNG bán cây vừa thuê).
+-- Cây thuê được trả lại kho cho thuê (EquipmentUnits), tiếp tục cho khách khác thuê.
 CREATE TABLE [dbo].[Vouchers]
 (
     [VoucherId]         INT             IDENTITY(1,1)   NOT NULL,
@@ -313,11 +321,11 @@ CREATE TABLE [dbo].[Vouchers]
 );
 GO
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 5: LU?NG THANH TO�N (VNPAY)
--- ????????????????????????????????????????????????????????????????????????????
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 5: LUỒNG THANH TOÁN (VNPAY)
+-- ────────────────────────────────────────────────────────────────────────────
 
--- B?ng 9: Payments � L?ch s? giao d?ch thanh to�n
+-- Bảng 9: Payments — Lịch sử giao dịch thanh toán
 CREATE TABLE [dbo].[Payments]
 (
     [PaymentId]         INT             IDENTITY(1,1)   NOT NULL,
@@ -342,11 +350,11 @@ CREATE TABLE [dbo].[Payments]
 );
 GO
 
--- ????????????????????????????????????????????????????????????????????????????
--- PH�N H? 6: LU?NG C�P K�O & K� QU? (MATCHMAKING & ESCROW)
--- ????????????????????????????????????????????????????????????????????????????
+-- ────────────────────────────────────────────────────────────────────────────
+-- PHÂN HỆ 6: LUỒNG CÁP KÈO & KÝ QUỸ (MATCHMAKING & ESCROW)
+-- ────────────────────────────────────────────────────────────────────────────
 
--- B?ng 10: Matches � B�i ??ng c�p k�o / giao l?u
+-- Bảng 10: Matches — Bài đăng cáp kèo / giao lưu
 CREATE TABLE [dbo].[Matches]
 (
     [MatchId]                   INT             IDENTITY(1,1)   NOT NULL,
@@ -379,7 +387,7 @@ CREATE TABLE [dbo].[Matches]
 );
 GO
 
--- B?ng 11: MatchMembers � Th�nh vi�n tham gia k�o
+-- Bảng 11: MatchMembers — Thành viên tham gia kèo
 CREATE TABLE [dbo].[MatchMembers]
 (
     [MemberId]      INT             IDENTITY(1,1)   NOT NULL,
@@ -400,7 +408,7 @@ CREATE TABLE [dbo].[MatchMembers]
 );
 GO
 
--- B?ng 12: EscrowTransactions � L?u v?t giao d?ch v� k� qu?
+-- Bảng 12: EscrowTransactions — Lưu vết giao dịch ví ký quỹ
 CREATE TABLE [dbo].[EscrowTransactions]
 (
     [TransactionId]     INT             IDENTITY(1,1)   NOT NULL,
@@ -424,60 +432,60 @@ CREATE TABLE [dbo].[EscrowTransactions]
 GO
 
 -- ============================================================================
--- PH?N 3: T?O C�C INDEX B? SUNG (Performance)
+-- PHẦN 3: TẠO CÁC INDEX BỔ SUNG (Performance)
 -- ============================================================================
 
--- T�m booking theo User
+-- Tìm booking theo User
 CREATE NONCLUSTERED INDEX [IX_Bookings_UserId]
 ON [dbo].[Bookings] ([UserId]);
 GO
 
--- T�m booking theo ng�y + s�n
+-- Tìm booking theo ngày + sân
 CREATE NONCLUSTERED INDEX [IX_Bookings_CourtDate]
 ON [dbo].[Bookings] ([CourtId], [BookingDate]);
 GO
 
--- T�m payment theo Booking
+-- Tìm payment theo Booking
 CREATE NONCLUSTERED INDEX [IX_Payments_BookingId]
 ON [dbo].[Payments] ([BookingId]);
 GO
 
--- T�m matches theo ng�y
+-- Tìm matches theo ngày
 CREATE NONCLUSTERED INDEX [IX_Matches_MatchDate]
 ON [dbo].[Matches] ([MatchDate]);
 GO
 
--- T�m matches theo host
+-- Tìm matches theo host
 CREATE NONCLUSTERED INDEX [IX_Matches_HostUserId]
 ON [dbo].[Matches] ([HostUserId]);
 GO
 
--- T�m escrow transactions theo v�
+-- Tìm escrow transactions theo ví
 CREATE NONCLUSTERED INDEX [IX_EscrowTx_WalletId]
 ON [dbo].[EscrowTransactions] ([WalletId]);
 GO
 
--- T�m EquipmentUnits theo EquipmentId
+-- Tìm EquipmentUnits theo EquipmentId
 CREATE NONCLUSTERED INDEX [IX_EquipmentUnits_EquipmentId]
 ON [dbo].[EquipmentUnits] ([EquipmentId]);
 GO
 
--- T�m EquipmentUnits c?n thanh l� (RentalCount >= 20)
+-- Tìm EquipmentUnits cần thanh lý (RentalCount >= 20)
 CREATE NONCLUSTERED INDEX [IX_EquipmentUnits_Liquidation]
 ON [dbo].[EquipmentUnits] ([RentalCount], [Status])
 WHERE [Status] = 'Available' AND [RentalCount] >= 20;
 GO
 
--- T�m Vouchers theo User
+-- Tìm Vouchers theo User
 CREATE NONCLUSTERED INDEX [IX_Vouchers_UserId]
 ON [dbo].[Vouchers] ([UserId]);
 GO
 
--- T�m Vouchers active ch?a h?t h?n
+-- Tìm Vouchers active chưa hết hạn
 CREATE NONCLUSTERED INDEX [IX_Vouchers_Active]
 ON [dbo].[Vouchers] ([Status], [ExpiresAt])
 WHERE [Status] = 'Active';
 GO
 
-PRINT N'? Schema ProSportDB ?� ???c t?o th�nh c�ng v?i 14 b?ng, r�ng bu?c v� index.';
+PRINT N'✅ Schema ProSportDB đã được tạo thành công với 14 bảng, ràng buộc và index.';
 GO

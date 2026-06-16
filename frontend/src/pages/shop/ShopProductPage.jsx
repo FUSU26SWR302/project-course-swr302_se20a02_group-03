@@ -47,7 +47,7 @@ export default function ShopProductPage() {
             </div>
             <div className="flex gap-2">
               {thumbs.map((t, i) => (
-                <button key={i} className={`w-[72px] h-[72px] rounded-[10px] border-2 overflow-hidden cursor-pointer p-0 bg-[#f5f9fc] transition-colors duration-200 ${activeThumb === i ? 'border-[#0d8a8a]' : 'border-[#e0ecf0]'}`} onClick={() => setActiveThumb(i)}>
+                <button key={t} className={`w-[72px] h-[72px] rounded-[10px] border-2 overflow-hidden cursor-pointer p-0 bg-[#f5f9fc] transition-colors duration-200 ${activeThumb === i ? 'border-[#0d8a8a]' : 'border-[#e0ecf0]'}`} onClick={() => setActiveThumb(i)}>
                   <img src={t} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
@@ -69,7 +69,7 @@ export default function ShopProductPage() {
               <div className="flex gap-2">
                 {colors.map((c, i) => (
                   <button
-                    key={i}
+                    key={c.name}
                     className={`w-7 h-7 rounded-full border-[2.5px] cursor-pointer transition-all duration-200 ${selectedColor === i ? 'border-[#0d2d3a] shadow-[0_0_0_2px_white,0_0_0_4px_#0d2d3a]' : 'border-transparent'}`}
                     style={{background: c.hex}}
                     onClick={() => setSelectedColor(i)}

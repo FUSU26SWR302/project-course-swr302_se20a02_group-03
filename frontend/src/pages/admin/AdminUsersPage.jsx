@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {users.map((u, i) => (
-                <tr key={i} className="hover:bg-slate-50/55 transition-colors">
+                <tr key={u.email} className="hover:bg-slate-50/55 transition-colors">
                   <td className="px-5 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       {u.avatar ? (

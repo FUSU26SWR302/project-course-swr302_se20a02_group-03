@@ -4,31 +4,31 @@ import MatchProLayout from '../../layouts/MatchProLayout'
 import './MatchProCommunityPage.css'
 
 const posts = [
-  { id: 1, user: 'Sarah J.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80', time: '2 min ago', content: 'Just hit a new personal best at Westside Tennis Club! 🎾 Anyone up for a doubles game this weekend?', likes: 24, comments: 8, sport: 'Tennis' },
-  { id: 2, user: 'Marcus T.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80', time: '15 min ago', content: 'Great padel session with the crew today. Looking for advanced-level partners for Thursday evening. DM me!', likes: 18, comments: 5, sport: 'Padel' },
-  { id: 3, user: 'Alex M.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80', time: '1 hr ago', content: 'The new basketball courts at City Sports Hub are incredible. Pro-level flooring and lighting. Highly recommend!', likes: 42, comments: 14, sport: 'Basketball' },
+  { id: 1, user: 'Sarah J.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80', time: '2 min ago', content: 'Vừa lập kỷ lục cá nhân mới tại Pro-Sport Badminton Center! 🏸 Ai muốn đánh đôi cuối tuần này không?', likes: 24, comments: 8, sport: 'Badminton' },
+  { id: 2, user: 'Marcus T.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80', time: '15 min ago', content: 'Buổi Pickleball hôm nay tuyệt vời quá! Đang tìm partner level advanced cho tối thứ 5. DM mình nhé!', likes: 18, comments: 5, sport: 'Pickleball' },
+  { id: 3, user: 'Alex M.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80', time: '1 hr ago', content: 'Sân cầu lông mới ở Quận 7 quá xịn! Mặt sàn BWF, đèn LED 800 lux. Rất recommend!', likes: 42, comments: 14, sport: 'Badminton' },
 ]
 
 const events = [
-  { id: 1, name: 'City Padel Open', date: 'Jun 15', sport: 'Padel', participants: 48, maxParticipants: 64, prize: '$500', img: 'https://images.unsplash.com/photo-1544919982-b61976f0ba43?w=400&q=80' },
-  { id: 2, name: 'Summer Tennis League', date: 'Jun 20', sport: 'Tennis', participants: 32, maxParticipants: 32, prize: 'Trophy', img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400&q=80' },
-  { id: 3, name: '3v3 Basketball Tourney', date: 'Jul 4', sport: 'Basketball', participants: 24, maxParticipants: 48, prize: '$1,000', img: 'https://images.unsplash.com/photo-1546519638405-a9f1558b3cba?w=400&q=80' },
+  { id: 1, name: 'Pro-Sport Badminton Open', date: 'Jun 15', sport: 'Badminton', participants: 48, maxParticipants: 64, prize: '5.000.000đ', img: 'https://images.unsplash.com/photo-1544919982-b61976f0ba43?w=400&q=80' },
+  { id: 2, name: 'Summer Pickleball League', date: 'Jun 20', sport: 'Pickleball', participants: 32, maxParticipants: 32, prize: 'Trophy', img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400&q=80' },
+  { id: 3, name: 'Cầu lông Đôi Hè 2026', date: 'Jul 4', sport: 'Badminton', participants: 24, maxParticipants: 48, prize: '10.000.000đ', img: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&q=80' },
 ]
 
 const groups = [
-  { id: 1, name: 'Tennis Intermediate Club', members: 234, sport: 'Tennis', icon: '🎾', joined: false },
-  { id: 2, name: 'Padel Warriors HCM', members: 189, sport: 'Padel', icon: '🏸', joined: true },
-  { id: 3, name: 'Weekend Ballers', members: 456, sport: 'Basketball', icon: '🏀', joined: false },
-  { id: 4, name: 'Badminton Masters', members: 312, sport: 'Badminton', icon: '🏸', joined: false },
+  { id: 1, name: 'Cầu lông Trung cấp SG', members: 234, sport: 'Badminton', icon: '🏸', joined: false },
+  { id: 2, name: 'Pickleball Warriors HCM', members: 189, sport: 'Pickleball', icon: '🏓', joined: true },
+  { id: 3, name: 'Badminton Masters VN', members: 456, sport: 'Badminton', icon: '🏸', joined: false },
+  { id: 4, name: 'Sài Gòn Pickleball Club', members: 312, sport: 'Pickleball', icon: '🏓', joined: false },
 ]
 
 const challenges = [
-  { id: 1, title: 'Play 10 matches this month', sport: 'Any', progress: 7, total: 10, reward: '500 pts', icon: '🏆' },
-  { id: 2, title: 'Win 5 consecutive matches', sport: 'Tennis', progress: 3, total: 5, reward: 'Badge', icon: '⚡' },
-  { id: 3, title: 'Try 3 different sports', sport: 'Multi', progress: 2, total: 3, reward: '300 pts', icon: '🌟' },
+  { id: 1, title: 'Đánh 10 trận trong tháng', sport: 'Any', progress: 7, total: 10, reward: '500 pts', icon: '🏆' },
+  { id: 2, title: 'Thắng 5 trận liên tiếp', sport: 'Badminton', progress: 3, total: 5, reward: 'Badge', icon: '⚡' },
+  { id: 3, title: 'Chơi cả 2 môn', sport: 'Multi', progress: 1, total: 2, reward: '300 pts', icon: '🌟' },
 ]
 
-const sportColors = { Tennis: '#0fc8b5', Padel: '#6366f1', Basketball: '#f59e0b', Badminton: '#22c55e', Soccer: '#ef4444', Multi: '#8b5cf6', Any: '#8b5cf6' }
+const sportColors = { Badminton: '#22c55e', Pickleball: '#6366f1', Multi: '#8b5cf6', Any: '#8b5cf6' }
 
 export default function MatchProCommunityPage() {
   const [activeTab, setActiveTab] = useState('Feed')
@@ -231,11 +231,11 @@ export default function MatchProCommunityPage() {
             </div>
             <div className="mp-trending-topics">
               <div className="mp-topic">
-                <p className="mp-topic__name">#SummerTennisLeague</p>
+                <p className="mp-topic__name">#BadmintonProSport</p>
                 <p className="mp-topic__count">124 posts</p>
               </div>
               <div className="mp-topic">
-                <p className="mp-topic__name">#PadelBeginners</p>
+                <p className="mp-topic__name">#PickleballSaiGon</p>
                 <p className="mp-topic__count">89 posts</p>
               </div>
               <div className="mp-topic">
@@ -256,7 +256,7 @@ export default function MatchProCommunityPage() {
               </div>
               <div className="mp-nearby-player__info">
                 <p className="mp-nearby-player__name">Jae K.</p>
-                <p className="mp-nearby-player__dist">Basketball</p>
+                <p className="mp-nearby-player__dist">Badminton</p>
               </div>
               <button className="mp-add-btn" aria-label="Add Friend">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -268,7 +268,7 @@ export default function MatchProCommunityPage() {
               </div>
               <div className="mp-nearby-player__info">
                 <p className="mp-nearby-player__name">Mia S.</p>
-                <p className="mp-nearby-player__dist">Tennis</p>
+                <p className="mp-nearby-player__dist">Pickleball</p>
               </div>
               <button className="mp-add-btn" aria-label="Add Friend">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>

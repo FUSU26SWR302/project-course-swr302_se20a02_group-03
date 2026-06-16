@@ -73,7 +73,7 @@ export default function AdminCourtsPage() {
             {/* Card 1 */}
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.02)] flex flex-col">
               <div className="relative h-[140px]">
-                <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=600&q=80" alt="Tennis Court" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=600&q=80" alt="Badminton Court" className="w-full h-full object-cover" />
                 <div className="absolute top-3 left-3 right-3 flex justify-between">
                   <span className="flex items-center gap-1 py-1 px-[10px] rounded-full text-[0.65rem] font-bold tracking-[0.05em] bg-white text-slate-900"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>CẦU LÔNG</span>
                   <span className="flex items-center gap-1 py-1 px-[10px] rounded-full text-[0.65rem] font-bold tracking-[0.05em] bg-green-500 text-white">AVAILABLE</span>
@@ -98,7 +98,7 @@ export default function AdminCourtsPage() {
             {/* Card 2 */}
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.02)] flex flex-col">
               <div className="relative h-[140px]">
-                <img src="https://images.unsplash.com/photo-1622227432807-91eb590c31ab?w=600&q=80" alt="Padel Court" className="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1622227432807-91eb590c31ab?w=600&q=80" alt="Pickleball Court" className="w-full h-full object-cover" />
                 <div className="absolute top-3 left-3 right-3 flex justify-between">
                   <span className="flex items-center gap-1 py-1 px-[10px] rounded-full text-[0.65rem] font-bold tracking-[0.05em] bg-white text-slate-900"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>PICKLEBALL</span>
                   <span className="flex items-center gap-1 py-1 px-[10px] rounded-full text-[0.65rem] font-bold tracking-[0.05em] bg-[#0f172a] text-white">BOOKED</span>

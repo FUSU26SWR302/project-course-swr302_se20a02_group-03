@@ -57,7 +57,7 @@ export default function ApexSupportPage() {
             <h2 className="support-section-title">Frequently Asked Questions</h2>
             <div className="faq-list">
               {faqs.map((faq, i) => (
-                <div key={i} className={`faq-item ${openFaq === i ? 'faq-item--open' : ''}`}>
+                <div key={faq.q} className={`faq-item ${openFaq === i ? 'faq-item--open' : ''}`}>
                   <button className="faq-item__question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                     <span>{faq.q}</span>
                     <span className="faq-item__arrow">{openFaq === i ? '▲' : '▼'}</span>

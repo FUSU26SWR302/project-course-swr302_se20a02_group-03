@@ -1,10 +1,64 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import { bookingApi } from '../../api/bookingApi'
+import { matchApi } from '../../api/matchApi'
+import { useToast } from '../../components/Toast'
 
 export default function CreateMatchPage() {
   const [step, setStep] = useState(1)
+  const navigate = useNavigate()
+  const { addToast } = useToast()
+  
+  const [myBookings, setMyBookings] = useState([])
+  const [formData, setFormData] = useState({
+    title: '',
+    skillLevel: 'Mới chơi',
+    bookingId: '',
+    maxParticipants: 2,
+    escrowAmount: 40000,
+    notes: ''
+  })
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    bookingApi.getMyBookings()
+      .then(res => {
+        if(res.data) setMyBookings(res.data)
+      })
+      .catch(err => console.error(err))
+  }, [])
+
+  const handleCreate = async () => {
+    if (!formData.bookingId) {
+      addToast("Vui lòng chọn một sân đã đặt", "error")
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const payload = {
+        bookingId: parseInt(formData.bookingId),
+        title: formData.title,
+        skillLevel: formData.skillLevel,
+        maxParticipants: parseInt(formData.maxParticipants),
+        escrowAmount: parseFloat(formData.escrowAmount)
+      }
+      
+      const res = await matchApi.createMatch(payload)
+      if (res.statusCode === 200 || res.statusCode === 201) {
+        addToast("Tạo kèo thành công!", "success")
+        navigate('/matches')
+      } else {
+        addToast(res.message || "Có lỗi xảy ra", "error")
+      }
+    } catch (error) {
+      addToast(error || "Có lỗi xảy ra", "error")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f5f9fb]">
@@ -35,7 +89,9 @@ export default function CreateMatchPage() {
                 <div className="space-y-5">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Tiêu đề kèo</label>
-                    <input type="text" placeholder="VD: Tìm 2 tay vợt lông trình trung bình khá" className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa]" />
+                    <input type="text" placeholder="VD: Tìm 2 tay vợt lông trình trung bình khá" 
+                           value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})}
+                           className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa]" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Bộ môn</label>
@@ -47,9 +103,9 @@ export default function CreateMatchPage() {
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Trình độ yêu cầu</label>
                     <div className="flex gap-2">
-                      <button className="flex-1 py-2 rounded-lg border border-slate-200 hover:border-[#00c8aa] text-sm">Mới chơi</button>
-                      <button className="flex-1 py-2 rounded-lg border border-[#00c8aa] bg-[#00c8aa]/5 text-[#00897b] font-medium text-sm">Trung bình</button>
-                      <button className="flex-1 py-2 rounded-lg border border-slate-200 hover:border-[#00c8aa] text-sm">Khá / Giỏi</button>
+                      <button onClick={() => setFormData({...formData, skillLevel: 'Mới chơi'})} className={`flex-1 py-2 rounded-lg border text-sm ${formData.skillLevel === 'Mới chơi' ? 'border-[#00c8aa] bg-[#00c8aa]/5 text-[#00897b] font-medium' : 'border-slate-200 hover:border-[#00c8aa]'}`}>Mới chơi</button>
+                      <button onClick={() => setFormData({...formData, skillLevel: 'Trung bình'})} className={`flex-1 py-2 rounded-lg border text-sm ${formData.skillLevel === 'Trung bình' ? 'border-[#00c8aa] bg-[#00c8aa]/5 text-[#00897b] font-medium' : 'border-slate-200 hover:border-[#00c8aa]'}`}>Trung bình</button>
+                      <button onClick={() => setFormData({...formData, skillLevel: 'Khá / Giỏi'})} className={`flex-1 py-2 rounded-lg border text-sm ${formData.skillLevel === 'Khá / Giỏi' ? 'border-[#00c8aa] bg-[#00c8aa]/5 text-[#00897b] font-medium' : 'border-slate-200 hover:border-[#00c8aa]'}`}>Khá / Giỏi</button>
                     </div>
                   </div>
                 </div>
@@ -63,8 +119,11 @@ export default function CreateMatchPage() {
                 <div className="space-y-5">
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Chọn sân (Từ danh sách đặt sân của bạn)</label>
-                    <select className="w-full border border-[#00c8aa] bg-[#00c8aa]/5 text-[#00897b] rounded-xl px-4 py-3 outline-none font-medium">
-                      <option>The Apex Pavilion - Court A (Hôm nay, 18:00)</option>
+                    <select value={formData.bookingId} onChange={e => setFormData({...formData, bookingId: e.target.value})} className="w-full border border-[#00c8aa] bg-[#00c8aa]/5 text-[#00897b] rounded-xl px-4 py-3 outline-none font-medium">
+                      <option value="">-- Chọn Booking --</option>
+                      {myBookings.map(b => (
+                        <option key={b.bookingId} value={b.bookingId}>Booking #{b.bookingId} - {new Date(b.bookingDate).toLocaleDateString()} {b.startTime}</option>
+                      ))}
                     </select>
                     <p className="text-xs text-slate-400 mt-2">Kèo phải được gắn với một đơn đặt sân thực tế.</p>
                   </div>
@@ -93,11 +152,11 @@ export default function CreateMatchPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Số lượng slot cần tuyển</label>
-                      <input type="number" defaultValue="2" min="1" max="10" className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa]" />
+                      <input type="number" value={formData.maxParticipants} onChange={e => setFormData({...formData, maxParticipants: e.target.value})} min="1" max="10" className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa]" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Số tiền Camp/Slot (VNĐ)</label>
-                      <input type="number" defaultValue="40000" step="5000" className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa]" />
+                      <input type="number" value={formData.escrowAmount} onChange={e => setFormData({...formData, escrowAmount: e.target.value})} step="5000" className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa]" />
                     </div>
                   </div>
                   
@@ -110,15 +169,15 @@ export default function CreateMatchPage() {
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Ghi chú thêm</label>
-                    <textarea rows="3" placeholder="Nhớ mang theo nước uống..." className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa] resize-none"></textarea>
+                    <textarea rows="3" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} placeholder="Nhớ mang theo nước uống..." className="w-full border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-[#00c8aa] resize-none"></textarea>
                   </div>
                 </div>
                 <div className="flex gap-3 mt-8">
                   <button onClick={() => setStep(2)} className="px-6 bg-slate-100 text-slate-600 font-bold py-3.5 rounded-xl hover:bg-slate-200">Quay lại</button>
-                  <Link to="/matches" className="flex-1 bg-[#00c8aa] text-white font-bold py-3.5 rounded-xl text-center hover:bg-[#009e87] flex items-center justify-center gap-2">
-                    Tạo kèo
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  </Link>
+                  <button onClick={handleCreate} disabled={isLoading} className="flex-1 bg-[#00c8aa] text-white font-bold py-3.5 rounded-xl text-center hover:bg-[#009e87] flex items-center justify-center gap-2 disabled:opacity-70">
+                    {isLoading ? 'Đang tạo...' : 'Tạo kèo'}
+                    {!isLoading && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>}
+                  </button>
                 </div>
               </div>
             )}

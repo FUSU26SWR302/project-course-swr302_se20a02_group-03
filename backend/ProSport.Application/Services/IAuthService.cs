@@ -14,4 +14,5 @@ public interface IAuthService
     Task<ApiResponseDto<bool>> ResetPasswordAsync(ResetPasswordRequestDto request);
     Task<ApiResponseDto<bool>> ResendOtpAsync(ResendOtpRequestDto request);
     Task<ApiResponseDto<bool>> CompleteProfileAsync(int userId, CompleteProfileRequestDto request);
+    Task<ApiResponseDto<AuthResponseDto>> GetProfileAsync(int userId);
 }

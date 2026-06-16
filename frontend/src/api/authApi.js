@@ -24,6 +24,9 @@ const authApi = {
   },
   forgotPassword: (data) => {
     return axiosClient.post('/auth/forgot-password', data);
+  },
+  getProfile: () => {
+    return axiosClient.get('/auth/me');
   }
 };
 

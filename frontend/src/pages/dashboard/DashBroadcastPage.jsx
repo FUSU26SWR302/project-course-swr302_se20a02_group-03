@@ -142,7 +142,7 @@ export default function DashBroadcastPage() {
               <button className="bg-transparent border-none cursor-pointer text-slate-400 text-base">···</button>
             </div>
             {recentBroadcasts.map((b, i) => (
-              <div key={i} className="py-3.5 border-b border-[#f0f5f9] last:border-b-0">
+              <div key={b.title} className="py-3.5 border-b border-[#f0f5f9] last:border-b-0">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[0.65rem] font-bold tracking-[0.06em] px-2 py-[3px] rounded-full" style={{ background: b.statusColor + '20', color: b.statusColor }}>{b.status}</span>
                   <span className="text-[0.75rem] text-slate-400">{b.date}</span>

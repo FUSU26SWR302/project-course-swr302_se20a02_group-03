@@ -1,11 +1,11 @@
 -- ============================================================================
--- PRO-SPORT COMPLEX � Auth Migration Script
+-- PRO-SPORT COMPLEX — Auth Migration Script
 -- Target: Microsoft SQL Server 2019+
 -- Encoding: UTF-8
 -- Author: Senior Database Engineer (AI-Assisted)
 -- Date: 2026-05-26
 -- ============================================================================
--- H??NG D?N: Ch?y script n�y tr�n SSMS ?? c?p nh?t schema cho h? th?ng Auth.
+-- HƯỚNG DẪN: Chạy script này trên SSMS để cập nhật schema cho hệ thống Auth.
 -- ============================================================================
 
 USE [ProSportDB];
@@ -16,26 +16,26 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 -- ============================================================================
--- 1. C?P NH?T B?NG Users
+-- 1. CẬP NHẬT BẢNG Users
 -- ============================================================================
 
--- Cho ph�p PasswordHash ???c NULL (?? d�ng Google Login)
+-- Cho phép PasswordHash được NULL (để dùng Google Login)
 ALTER TABLE [dbo].[Users] ALTER COLUMN [PasswordHash] VARCHAR(500) NULL;
 GO
 
--- Th�m c?t GoogleId v� IsPhoneVerified
+-- Thêm cột GoogleId và IsPhoneVerified
 ALTER TABLE [dbo].[Users] ADD [GoogleId] VARCHAR(100) NULL;
 ALTER TABLE [dbo].[Users] ADD [IsPhoneVerified] BIT NOT NULL CONSTRAINT [DF_Users_IsPhoneVerified] DEFAULT (0);
 GO
 
--- Th�m Unique Index cho GoogleId (n?u kh�c NULL)
+-- Thêm Unique Index cho GoogleId (nếu khác NULL)
 CREATE UNIQUE NONCLUSTERED INDEX [UQ_Users_GoogleId]
 ON [dbo].[Users] ([GoogleId])
 WHERE [GoogleId] IS NOT NULL;
 GO
 
 -- ============================================================================
--- 2. T?O B?NG OtpCodes
+-- 2. TẠO BẢNG OtpCodes
 -- ============================================================================
 
 CREATE TABLE [dbo].[OtpCodes]
@@ -56,10 +56,10 @@ CREATE TABLE [dbo].[OtpCodes]
 );
 GO
 
--- Index ?? truy v?n nhanh OTP theo UserId v� Type
+-- Index để truy vấn nhanh OTP theo UserId và Type
 CREATE NONCLUSTERED INDEX [IX_OtpCodes_User_Type]
 ON [dbo].[OtpCodes] ([UserId], [Type], [IsUsed], [ExpiryTime]);
 GO
 
-PRINT N'>> Auth Migration Script ?� ch?y th�nh c�ng!';
+PRINT N'>> Auth Migration Script đã chạy thành công!';
 GO

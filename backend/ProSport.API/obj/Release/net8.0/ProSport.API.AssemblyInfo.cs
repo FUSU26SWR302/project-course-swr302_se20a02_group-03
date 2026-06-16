@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProSport.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc4a6bb7bff370bf14578acd93d67da75519380d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+163861b5ae07fba6aac404b53290993ac940a07f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProSport.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProSport.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -133,7 +133,7 @@ export default function AdminDashboardPage() {
                   { color: '#ef4444', bg: '#fee2e2', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>, title: 'Equipment Delay', desc: 'Racket set #14 late return flagged.', time: '28 mins ago' },
                   { color: '#64748b', bg: '#f1f5f9', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>, title: 'Booking Cancelled', desc: 'Court 2 at 18:00 freed up.', time: '1 hour ago' },
                 ].map((item, i, arr) => (
-                  <div key={i} className="flex gap-4 pb-5 relative">
+                  <div key={item.title} className="flex gap-4 pb-5 relative">
                     {i < arr.length - 1 && <div className="absolute left-[15px] top-8 bottom-0 w-[2px] bg-slate-200" />}
                     <div className="w-8 h-8 rounded-full flex items-center justify-center z-[1]" style={{ color: item.color, background: item.bg }}>
                       {item.icon}

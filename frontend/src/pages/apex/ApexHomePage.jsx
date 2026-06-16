@@ -1,20 +1,58 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ApexLayout from '../../layouts/ApexLayout'
-
-const bookings = [
-  { id: 1, name: 'Sân Cầu lông Trong nhà A', time: 'Today, 18:00 - 20:00', status: 'CONFIRMED', icon: '🏸', iconBg: '#0d8a8a' },
-  { id: 2, name: 'Sân Pickleball Chính', time: 'Tomorrow, 10:00 - 11:30', status: 'CONFIRMED', icon: '🏓', iconBg: '#f59e0b' },
-]
+import authApi from '../../api/authApi'
+import { bookingApi } from '../../api/bookingApi'
+import dayjs from 'dayjs'
 
 export default function ApexHomePage() {
+  const [userProfile, setUserProfile] = useState(null)
+  const [upcomingBookings, setUpcomingBookings] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [profileRes, bookingsRes] = await Promise.all([
+          authApi.getProfile(),
+          bookingApi.getMyBookings()
+        ])
+        
+        if (profileRes?.data?.data) setUserProfile(profileRes.data.data)
+        
+        if (bookingsRes?.data?.data) {
+          // Lấy 3 booking sắp tới
+          const upcoming = bookingsRes.data.data
+            .filter(b => b.status === 'Confirmed' || b.status === 'Pending')
+            .flatMap(b => b.bookingDetails.map(d => ({
+              id: d.bookingDetailId,
+              name: d.courtName,
+              date: d.bookingDate,
+              startTime: d.startTime,
+              endTime: d.endTime,
+              status: b.status,
+              icon: d.courtName?.toLowerCase().includes('pickleball') ? '🏓' : '🏸',
+              iconBg: d.courtName?.toLowerCase().includes('pickleball') ? '#f59e0b' : '#0d8a8a'
+            })))
+            .sort((a, b) => new Date(`${a.date}T${a.startTime}`) - new Date(`${b.date}T${b.startTime}`))
+            .slice(0, 3)
+            
+          setUpcomingBookings(upcoming)
+        }
+      } catch (err) {
+        console.error("Failed to fetch home data", err)
+      }
+    }
+    fetchData()
+  }, [])
+
   return (
     <ApexLayout title="Home">
       <div>
         {/* Hero */}
         <div className="bg-gradient-to-br from-[#e8f7f5] to-[#d0eff8] rounded-2xl p-8 mb-6">
           <div>
-            <h1 className="font-['Oswald'] text-[1.8rem] font-bold text-[#0d2d3a] mb-2.5">Welcome back, <span className="text-[#0fc8b5]">Alex</span></h1>
-            <p className="text-[0.9rem] text-slate-500 leading-relaxed mb-5 max-w-[500px]">You have 2 upcoming bookings and 1 pending match invitation. Ready to hit the court?</p>
+            <h1 className="font-['Oswald'] text-[1.8rem] font-bold text-[#0d2d3a] mb-2.5">Welcome back, <span className="text-[#0fc8b5]">{userProfile?.fullName?.split(' ')[0] || 'User'}</span></h1>
+            <p className="text-[0.9rem] text-slate-500 leading-relaxed mb-5 max-w-[500px]">You have {upcomingBookings.length} upcoming bookings and 1 pending match invitation. Ready to hit the court?</p>
             <div className="flex gap-3">
               <Link to="/apex/booking" className="btn-primary">Book a Court</Link>
               <Link to="/apex/shop" className="btn-outline">Rent Equipment</Link>
@@ -29,16 +67,20 @@ export default function ApexHomePage() {
               <h2 className="text-base font-bold text-[#0d2d3a] mb-4">Upcoming Bookings</h2>
               <Link to="/apex/booking" className="text-[0.82rem] text-[#0fc8b5] font-semibold">View All</Link>
             </div>
-            {bookings.map(b => (
-              <div key={b.id} className="flex items-center gap-3 py-3 border-b border-[#f0f5f9] last:border-b-0">
-                <div className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[1.1rem] shrink-0" style={{background: b.iconBg}}>{b.icon}</div>
-                <div>
-                  <p className="text-sm font-bold text-[#0d2d3a]">{b.name}</p>
-                  <p className="text-[0.78rem] text-slate-400 mt-0.5">{b.time}</p>
+            {upcomingBookings.length === 0 ? (
+              <p className="text-sm text-slate-400 py-4 text-center">No upcoming bookings.</p>
+            ) : (
+              upcomingBookings.map(b => (
+                <div key={b.id} className="flex items-center gap-3 py-3 border-b border-[#f0f5f9] last:border-b-0">
+                  <div className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[1.1rem] shrink-0" style={{background: b.iconBg}}>{b.icon}</div>
+                  <div>
+                    <p className="text-sm font-bold text-[#0d2d3a]">{b.name}</p>
+                    <p className="text-[0.78rem] text-slate-400 mt-0.5">{dayjs(b.date).format('MMM DD')}, {b.startTime?.slice(0,5)} - {b.endTime?.slice(0,5)}</p>
+                  </div>
+                  <span className={`ml-auto text-[0.7rem] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${b.status === 'Confirmed' ? 'text-green-500 bg-green-500/10' : 'text-orange-500 bg-orange-500/10'}`}>{b.status?.toUpperCase()}</span>
                 </div>
-                <span className="ml-auto text-[0.7rem] font-bold text-green-500 bg-green-500/10 px-2.5 py-1 rounded-full whitespace-nowrap">{b.status}</span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Active Rentals */}

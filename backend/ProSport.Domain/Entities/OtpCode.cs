@@ -1,6 +1,6 @@
 namespace ProSport.Domain.Entities;
 
-public class OtpCode
+public class OtpCode : BaseEntity
 {
     public int OtpId { get; set; }
     public int UserId { get; set; }
@@ -8,7 +8,6 @@ public class OtpCode
     public string Type { get; set; } = null!; // "Register", "ResetPassword"
     public DateTime ExpiryTime { get; set; }
     public bool IsUsed { get; set; }
-    public DateTime CreatedAt { get; set; }
 
     // Navigation properties
     public User User { get; set; } = null!;

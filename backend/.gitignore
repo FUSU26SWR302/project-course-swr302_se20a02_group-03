@@ -1,0 +1,7 @@
+## .NET build artifacts (also covered by repo root .gitignore)
+bin/
+obj/
+
+## User-specific
+*.user
+.vs/

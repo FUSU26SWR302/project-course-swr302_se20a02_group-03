@@ -1,31 +1,73 @@
 import { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import ApexLayout from '../../layouts/ApexLayout'
+import { matchApi } from '../../api/matchApi'
+import authApi from '../../api/authApi'
+import dayjs from 'dayjs'
 import './ApexMatchesPage.css'
 
-const openMatches = [
-  { id: 1, sport: 'Tennis', type: 'Doubles', level: 'Intermediate', host: 'David K.', hostImg: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80', court: 'Indoor Court A', date: 'Tomorrow', time: '18:00', slots: 2, maxSlots: 4, icon: '🎾' },
-  { id: 2, sport: 'Badminton', type: 'Singles', level: 'Beginner', host: 'Linh N.', hostImg: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&q=80', court: 'Hall C', date: 'Sat, Jun 1', time: '08:00', slots: 1, maxSlots: 2, icon: '🏸' },
-  { id: 3, sport: 'Basketball', type: '3v3', level: 'Advanced', host: 'Mike T.', hostImg: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80', court: 'Main Arena', date: 'Sun, Jun 2', time: '14:00', slots: 3, maxSlots: 6, icon: '🏀' },
-  { id: 4, sport: 'Padel', type: 'Doubles', level: 'Intermediate', host: 'Sarah J.', hostImg: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80', court: 'Padel Court 1', date: 'Mon, Jun 3', time: '19:00', slots: 2, maxSlots: 4, icon: '🏸' },
-  { id: 5, sport: 'Squash', type: 'Singles', level: 'Pro', host: 'James L.', hostImg: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=80&q=80', court: 'Squash 2', date: 'Tue, Jun 4', time: '07:00', slots: 1, maxSlots: 2, icon: '🟡' },
-]
-
 const myMatches = [
-  { id: 1, sport: 'Tennis', opponent: 'David K.', result: 'WON', score: '6-3, 6-4', date: '2 days ago', icon: '🎾' },
-  { id: 2, sport: 'Basketball', opponent: 'Team Alpha', result: 'LOST', score: '58-72', date: 'Last week', icon: '🏀' },
+  { id: 1, sport: 'Badminton', opponent: 'David K.', result: 'WON', score: '21-15, 21-18', date: '2 days ago', icon: '🏸' },
+  { id: 2, sport: 'Pickleball', opponent: 'Team Alpha', result: 'LOST', score: '9-11, 11-8, 7-11', date: 'Last week', icon: '🏓' },
   { id: 3, sport: 'Badminton', opponent: 'Linh N.', result: 'WON', score: '21-15, 21-18', date: 'Last week', icon: '🏸' },
 ]
 
 const levels = ['All Levels', 'Beginner', 'Intermediate', 'Advanced', 'Pro']
-const sports = ['All Sports', 'Tennis', 'Basketball', 'Padel', 'Squash', 'Badminton']
+const sports = ['All Sports', 'Badminton', 'Pickleball']
 
 export default function ApexMatchesPage() {
   const [tab, setTab] = useState('find')
   const [levelFilter, setLevelFilter] = useState('All Levels')
   const [sportFilter, setSportFilter] = useState('All Sports')
   const [joined, setJoined] = useState([])
+  const [openMatches, setOpenMatches] = useState([])
+  const [userId, setUserId] = useState(null)
   const pageRef = useRef(null)
+
+  useEffect(() => {
+    const initData = async () => {
+      try {
+        const [profileRes, matchesRes] = await Promise.all([
+          authApi.getProfile(),
+          matchApi.getOpenMatches()
+        ])
+        
+        if (profileRes?.data?.data) {
+          setUserId(profileRes.data.data.userId)
+        }
+        
+        if (matchesRes?.data?.data) {
+          const formatted = matchesRes.data.data.map(m => ({
+            id: m.matchId,
+            sport: m.sportType,
+            type: m.isCompetitive ? 'Competitive' : 'Friendly',
+            level: m.skillLevel,
+            host: m.hostName,
+            hostImg: m.hostAvatarUrl || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(m.hostName),
+            court: m.location,
+            date: dayjs(m.startTime).format('ddd, MMM D'),
+            time: dayjs(m.startTime).format('HH:mm'),
+            slots: m.maxParticipants - m.currentParticipants,
+            maxSlots: m.maxParticipants,
+            icon: m.sportType?.toLowerCase().includes('pickleball') ? '🏓' : '🏸',
+            participants: m.participants || []
+          }))
+          setOpenMatches(formatted)
+          
+          // Find matches the user has already joined
+          if (profileRes?.data?.data?.userId) {
+            const myJoined = formatted
+              .filter(m => m.participants.some(p => p.userId === profileRes.data.data.userId))
+              .map(m => m.id)
+            setJoined(myJoined)
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load matches", err)
+      }
+    }
+    initData()
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -40,9 +82,14 @@ export default function ApexMatchesPage() {
     (sportFilter === 'All Sports' || m.sport === sportFilter)
   )
 
-  const handleJoin = (id) => {
-    setJoined(prev => [...prev, id])
-    gsap.from(`#match-join-${id}`, { scale: 0.8, duration: 0.3, ease: 'back.out(1.7)' })
+  const handleJoin = async (id) => {
+    try {
+      await matchApi.joinMatch(id)
+      setJoined(prev => [...prev, id])
+      gsap.from(`#match-join-${id}`, { scale: 0.8, duration: 0.3, ease: 'back.out(1.7)' })
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to join match')
+    }
   }
 
   return (
@@ -83,7 +130,7 @@ export default function ApexMatchesPage() {
                   <div className="match-card__info">
                     <div className="match-card__top">
                       <span className="match-card__name">{m.sport} — {m.type}</span>
-                      <span className={`match-level match-level--${m.level.toLowerCase()}`}>{m.level}</span>
+                      <span className={`match-level match-level--${m.level?.toLowerCase() || 'intermediate'}`}>{m.level || 'Intermediate'}</span>
                     </div>
                     <div className="match-card__meta">
                       <span>📅 {m.date} at {m.time}</span>

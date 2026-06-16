@@ -11,11 +11,21 @@ import RoleSelectionPage from './pages/RoleSelectionPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
+import PrivacyPolicyPage from './pages/legal/PrivacyPolicyPage'
+import TermsOfServicePage from './pages/legal/TermsOfServicePage'
+import SitemapPage from './pages/legal/SitemapPage'
+import BrandMissionPage from './pages/platform/BrandMissionPage'
 import CourtDetailPage from './pages/courts/CourtDetailPage'
 import BookingPage from './pages/courts/BookingPage'
 import MatchDetailPage from './pages/matches/MatchDetailPage'
 import CreateMatchPage from './pages/matches/CreateMatchPage'
 import GearCatalogPage from './pages/gear/GearCatalogPage'
+import GearDashboardPage from './pages/gear/GearDashboardPage'
+import GearRentalPage from './pages/gear/GearRentalPage'
+import GearRentalTermsPage from './pages/gear/GearRentalTermsPage'
+import GearMaintenancePage from './pages/gear/GearMaintenancePage'
+import GearSupportPage from './pages/gear/GearSupportPage'
+import GearPrivacyPage from './pages/gear/GearPrivacyPage'
 import BookingHistoryPage from './pages/customer/BookingHistoryPage'
 import CustomerProfilePage from './pages/customer/CustomerProfilePage'
 import ReportDisputePage from './pages/customer/ReportDisputePage'
@@ -53,6 +63,7 @@ import EliteSchedulePage from './pages/elite/EliteSchedulePage'
 import EliteEquipmentPage from './pages/elite/EliteEquipmentPage'
 import EliteVouchersPage from './pages/elite/EliteVouchersPage'
 import EliteDisputesPage from './pages/elite/EliteDisputesPage'
+import EliteScannerPage from './pages/elite/EliteScannerPage'
 
 // PRO-SPORT Mobile App Pages
 import MobileHomePage from './pages/mobile/MobileHomePage'
@@ -68,11 +79,18 @@ import MobileBookingPage from './pages/mobile/MobileBookingPage'
 import NotFoundPage from './pages/status/NotFoundPage'
 import RestrictedPage from './pages/status/RestrictedPage'
 import MaintenancePage from './pages/status/MaintenancePage'
+import PaymentReturnPage from './pages/status/PaymentReturnPage'
 
 // BUG #13 FIX: Redirect guard — authenticated users can't access login/register
 function GuestRoute({ children }) {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     if (token) return <Navigate to="/" replace />
+    return children
+}
+
+function ProtectedRoute({ children }) {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) return <Navigate to="/login" replace />
     return children
 }
 
@@ -91,6 +109,10 @@ function App() {
                     <Route path="/reset-password" element={<GuestRoute><ResetPasswordPage /></GuestRoute>} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/brand-mission" element={<BrandMissionPage />} />
+                    <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                    <Route path="/terms" element={<TermsOfServicePage />} />
+                    <Route path="/sitemap" element={<SitemapPage />} />
 
                     {/* Courts */}
                     <Route path="/courts" element={<ApexHomePage />} />
@@ -106,22 +128,29 @@ function App() {
                     <Route path="/matches/leaderboard" element={<MatchProLeaderboardPage />} />
 
                     {/* Customer */}
-                    <Route path="/customer/profile" element={<CustomerProfilePage />} />
-                    <Route path="/customer/bookings" element={<BookingHistoryPage />} />
-                    <Route path="/customer/report" element={<ReportDisputePage />} />
+                    <Route path="/customer/profile" element={<ProtectedRoute><CustomerProfilePage /></ProtectedRoute>} />
+                    <Route path="/customer/bookings" element={<ProtectedRoute><BookingHistoryPage /></ProtectedRoute>} />
+                    <Route path="/customer/report" element={<ProtectedRoute><ReportDisputePage /></ProtectedRoute>} />
 
                     {/* Gear */}
-                    <Route path="/gear" element={<GearCatalogPage />} />
+                    <Route path="/gear" element={<Navigate to="/gear/catalog" replace />} />
+                    <Route path="/gear/dashboard" element={<GearDashboardPage />} />
+                    <Route path="/gear/rentals" element={<GearRentalPage />} />
+                    <Route path="/gear/catalog" element={<GearCatalogPage />} />
+                    <Route path="/gear/rental-terms" element={<GearRentalTermsPage />} />
+                    <Route path="/gear/maintenance" element={<GearMaintenancePage />} />
+                    <Route path="/gear/support" element={<GearSupportPage />} />
+                    <Route path="/gear/privacy" element={<GearPrivacyPage />} />
 
                     {/* Apex Portal Routes */}
-                    <Route path="/apex" element={<ApexHomePage />} />
-                    <Route path="/apex/booking" element={<ApexBookingPage />} />
-                    <Route path="/apex/matches" element={<ApexMatchesPage />} />
-                    <Route path="/apex/shop" element={<ApexShopPage />} />
-                    <Route path="/apex/profile" element={<ApexProfilePage />} />
-                    <Route path="/apex/activity" element={<ApexActivityPage />} />
-                    <Route path="/apex/settings" element={<ApexSettingsPage />} />
-                    <Route path="/apex/support" element={<ApexSupportPage />} />
+                    <Route path="/apex" element={<ProtectedRoute><ApexHomePage /></ProtectedRoute>} />
+                    <Route path="/apex/booking" element={<ProtectedRoute><ApexBookingPage /></ProtectedRoute>} />
+                    <Route path="/apex/matches" element={<ProtectedRoute><ApexMatchesPage /></ProtectedRoute>} />
+                    <Route path="/apex/shop" element={<ProtectedRoute><ApexShopPage /></ProtectedRoute>} />
+                    <Route path="/apex/profile" element={<ProtectedRoute><ApexProfilePage /></ProtectedRoute>} />
+                    <Route path="/apex/activity" element={<ProtectedRoute><ApexActivityPage /></ProtectedRoute>} />
+                    <Route path="/apex/settings" element={<ProtectedRoute><ApexSettingsPage /></ProtectedRoute>} />
+                    <Route path="/apex/support" element={<ProtectedRoute><ApexSupportPage /></ProtectedRoute>} />
 
                     {/* Admin Portal Routes */}
                     <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
@@ -140,6 +169,7 @@ function App() {
                     <Route path="/elite/equipment" element={<EliteEquipmentPage />} />
                     <Route path="/elite/vouchers" element={<EliteVouchersPage />} />
                     <Route path="/elite/disputes" element={<EliteDisputesPage />} />
+                    <Route path="/elite/scanner" element={<EliteScannerPage />} />
 
                     {/* Mobile App Routes */}
                     <Route path="/mobile" element={<Navigate to="/mobile/home" replace />} />
@@ -154,6 +184,7 @@ function App() {
 
                     {/* Status Pages */}
                     <Route path="/maintenance" element={<MaintenancePage />} />
+                    <Route path="/payment-return" element={<PaymentReturnPage />} />
                     <Route path="/403" element={<RestrictedPage />} />
                     <Route path="/404" element={<NotFoundPage />} />
                     <Route path="*" element={<NotFoundPage />} />

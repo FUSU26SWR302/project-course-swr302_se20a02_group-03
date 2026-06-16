@@ -32,7 +32,7 @@ export function useNavbarEntrance() {
         gsap.set(ref.current, { y: 0, opacity: 1, clearProps: 'transform' })
       }
     }
-  }, [])
+  }, [ref])
 
   return ref
 }

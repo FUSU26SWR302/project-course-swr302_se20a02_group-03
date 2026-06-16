@@ -6,14 +6,14 @@ import './ApexShopPage.css'
 const categories = ['All', 'Rackets', 'Shoes', 'Apparel', 'Balls', 'Accessories']
 
 const products = [
-  { id: 1, name: 'Pro Carbon Racket X7', category: 'Rackets', sport: 'Tennis', price: 189, rental: 12, stock: 8, rating: 4.9, reviews: 124, img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400&q=80', badge: 'PRO PICK' },
-  { id: 2, name: 'Elite Court Shoes', category: 'Shoes', sport: 'Multi', price: 135, rental: null, stock: 15, rating: 4.7, reviews: 89, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80', badge: null },
-  { id: 3, name: 'Padel Performance Racket', category: 'Rackets', sport: 'Padel', price: 145, rental: 10, stock: 5, rating: 4.8, reviews: 63, img: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80', badge: 'NEW' },
-  { id: 4, name: 'Pro Training Shorts', category: 'Apparel', sport: 'Multi', price: 55, rental: null, stock: 30, rating: 4.5, reviews: 42, img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80', badge: null },
-  { id: 5, name: 'Premium Tennis Balls (4-pack)', category: 'Balls', sport: 'Tennis', price: 18, rental: null, stock: 100, rating: 4.6, reviews: 200, img: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&q=80', badge: 'BESTSELLER' },
-  { id: 6, name: 'Badminton Shuttlecocks', category: 'Balls', sport: 'Badminton', price: 22, rental: null, stock: 60, rating: 4.4, reviews: 78, img: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&q=80', badge: null },
-  { id: 7, name: 'Sport Backpack Pro', category: 'Accessories', sport: 'Multi', price: 78, rental: null, stock: 12, rating: 4.8, reviews: 55, img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80', badge: null },
-  { id: 8, name: 'Compression Wristbands (set)', category: 'Accessories', sport: 'Multi', price: 24, rental: null, stock: 50, rating: 4.3, reviews: 33, img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&q=80', badge: null },
+  { id: 1, name: 'Vợt Cầu lông Yonex Astrox 99', category: 'Rackets', sport: 'Badminton', price: 189, rental: 12, stock: 8, rating: 4.9, reviews: 124, img: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&q=80', badge: 'PRO PICK' },
+  { id: 2, name: 'Giày Cầu lông Yonex 65Z', category: 'Shoes', sport: 'Badminton', price: 135, rental: null, stock: 15, rating: 4.7, reviews: 89, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80', badge: null },
+  { id: 3, name: 'Vợt Pickleball Selkirk Amped', category: 'Rackets', sport: 'Pickleball', price: 145, rental: 10, stock: 5, rating: 4.8, reviews: 63, img: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&q=80', badge: 'NEW' },
+  { id: 4, name: 'Quần Short Thể thao Pro', category: 'Apparel', sport: 'Multi', price: 55, rental: null, stock: 30, rating: 4.5, reviews: 42, img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80', badge: null },
+  { id: 5, name: 'Cầu lông Feather (12 quả)', category: 'Balls', sport: 'Badminton', price: 22, rental: null, stock: 60, rating: 4.4, reviews: 78, img: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400&q=80', badge: 'BESTSELLER' },
+  { id: 6, name: 'Bóng Pickleball Franklin X-40 (6 quả)', category: 'Balls', sport: 'Pickleball', price: 18, rental: null, stock: 100, rating: 4.6, reviews: 200, img: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&q=80', badge: null },
+  { id: 7, name: 'Balo Thể thao Pro', category: 'Accessories', sport: 'Multi', price: 78, rental: null, stock: 12, rating: 4.8, reviews: 55, img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80', badge: null },
+  { id: 8, name: 'Băng cổ tay thấm mồ hôi (bộ)', category: 'Accessories', sport: 'Multi', price: 24, rental: null, stock: 50, rating: 4.3, reviews: 33, img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&q=80', badge: null },
 ]
 
 export default function ApexShopPage() {

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import MatchProLayout from '../../layouts/MatchProLayout'
+import { matchApi } from '../../api/matchApi'
 
 const sidebarLinks = [
   { label: 'Trending Matches', icon: '📈', active: true, path: '/matches' },
@@ -12,53 +13,39 @@ const sidebarLinks = [
 
 const sportFilters = ['Tất cả', 'Cầu lông', 'Pickleball']
 
-const matches = [
-  {
-    id: 1,
-    host: 'Alex Mercer',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80',
-    level: 'Intermediate',
-    sport: 'Cầu lông',
-    location: 'Downtown Sports Complex',
-    time: 'Today, 6:00 PM',
-    slots: '2 SLOTS LEFT',
-    slotsColor: '#f59e0b',
-  },
-  {
-    id: 2,
-    host: 'Sarah Jenkins',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80',
-    level: 'Advanced',
-    sport: 'Pickleball',
-    location: 'Westside Club Courts',
-    time: 'Tomorrow, 8:00 AM',
-    slots: '1 SLOT LEFT',
-    slotsColor: '#ef4444',
-  },
-]
-
 const nearbyPlayers = [
-  { name: 'Marcus T.', dist: '0.5 miles away', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80', online: true },
-  { name: 'Elena R.', dist: '1.2 miles away', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80', online: true },
+  { name: 'David K.', dist: '1.2 km away', avatar: 'https://ui-avatars.com/api/?name=David+K&background=00c8aa&color=fff', online: true },
+  { name: 'Sarah M.', dist: '2.5 km away', avatar: 'https://ui-avatars.com/api/?name=Sarah+M&background=f0f7f6&color=00c8aa', online: false },
+  { name: 'Michael T.', dist: '3.1 km away', avatar: 'https://ui-avatars.com/api/?name=Michael+T&background=0d2d3a&color=fff', online: true },
 ]
 
 const leaderboard = [
-  { rank: 1, name: 'David K.', pts: '2,450 pts', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80' },
-  { rank: 2, name: 'Jessica W.', pts: '2,100 pts', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&q=80' },
+  { rank: 1, name: 'Alex H.', pts: '2,450', avatar: 'https://ui-avatars.com/api/?name=Alex+H' },
+  { rank: 2, name: 'Jordan L.', pts: '2,120', avatar: 'https://ui-avatars.com/api/?name=Jordan+L' },
+  { rank: 3, name: 'Taylor S.', pts: '1,980', avatar: 'https://ui-avatars.com/api/?name=Taylor+S' },
 ]
 
 export default function MatchProFeedPage() {
   const [activeFilter, setActiveFilter] = useState('All Sports')
+  const [matches, setMatches] = useState([])
   const feedRef = useRef(null)
 
   useEffect(() => {
-    if (feedRef.current) {
+    matchApi.getOpenMatches()
+      .then(res => {
+        if(res.data) setMatches(res.data);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    if (feedRef.current && matches.length > 0) {
       gsap.fromTo(feedRef.current.children,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out' }
       )
     }
-  }, [activeFilter])
+  }, [activeFilter, matches])
 
   return (
     <MatchProLayout>
@@ -108,22 +95,29 @@ export default function MatchProFeedPage() {
 
           {/* Match cards */}
           <div ref={feedRef} className="grid grid-cols-2 max-sm:grid-cols-1 gap-4">
-            {matches.map(m => (
-              <Link to={`/matches/${m.id}`} key={m.id} className="bg-white rounded-[14px] border-[1.5px] border-[#e0ecf0] p-[18px] flex flex-col gap-3.5 no-underline text-inherit transition-all border-l-[3px] border-l-[#00c8aa] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 hover:border-[#00c8aa]">
+            {matches.length === 0 ? (
+              <div className="col-span-full text-center py-10 text-slate-500">Chưa có kèo nào đang mở.</div>
+            ) : matches.map(m => (
+              <Link to={`/matches/${m.matchId}`} key={m.matchId} className="bg-white rounded-[14px] border-[1.5px] border-[#e0ecf0] p-[18px] flex flex-col gap-3.5 no-underline text-inherit transition-all border-l-[3px] border-l-[#00c8aa] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 hover:border-[#00c8aa]">
                 <div className="flex items-start gap-2.5">
-                  <img src={m.avatar} alt={m.host} className="w-10 h-10 rounded-full object-cover shrink-0" />
-                  <div>
-                    <p className="font-bold text-[0.9rem] text-[#0d2d3a]">{m.host}</p>
-                    <p className="text-[0.72rem] text-slate-400">Host</p>
-                    <p className="text-[0.78rem] text-slate-500 mt-0.5">{m.level} • {m.sport}</p>
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[#00c8aa]">
+                    {m.hostId}
                   </div>
-                  <span className="ml-auto text-[0.7rem] font-bold px-2 py-1 rounded-full whitespace-nowrap shrink-0" style={{background: m.slotsColor + '22', color: m.slotsColor}}>{m.slots}</span>
+                  <div>
+                    <p className="font-bold text-[0.9rem] text-[#0d2d3a]">{m.title}</p>
+                    <p className="text-[0.72rem] text-slate-400">Host ID: {m.hostId}</p>
+                    <p className="text-[0.78rem] text-slate-500 mt-0.5">{m.skillLevel}</p>
+                  </div>
+                  <span className="ml-auto text-[0.7rem] font-bold px-2 py-1 rounded-full whitespace-nowrap shrink-0 bg-amber-50 text-amber-500">
+                    {m.maxParticipants - m.currentParticipants} SLOTS LEFT
+                  </span>
                 </div>
                 <div className="flex flex-col gap-[5px] text-[0.8rem] text-slate-500">
-                  <span>📍 {m.location}</span>
-                  <span>🕐 {m.time}</span>
+                  <span>📍 {new Date(m.matchDate).toLocaleDateString()}</span>
+                  <span>🕐 {m.startTime}</span>
+                  <span className="font-bold text-[#00c8aa]">Phí tham gia: {m.escrowAmount.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
-                <button className="btn-primary w-full justify-center p-2.5 rounded-lg text-sm">Join Match</button>
+                <button className="btn-primary w-full justify-center p-2.5 rounded-lg text-sm">Xem Chi Tiết</button>
               </Link>
             ))}
           </div>

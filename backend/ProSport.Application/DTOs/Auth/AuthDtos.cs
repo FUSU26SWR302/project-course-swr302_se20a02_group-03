@@ -111,4 +111,5 @@ public class AuthResponseDto
     public string Role { get; set; } = null!;
     public string AccessToken { get; set; } = null!;
     public bool IsProfileComplete { get; set; }
+    public string? AvatarUrl { get; set; }
 }

@@ -5,21 +5,21 @@ import './ApexProfilePage.css'
 
 const badges = [
   { icon: '🏆', label: 'Pro Member', color: '#f59e0b' },
-  { icon: '🎾', label: '50+ Matches', color: '#0fc8b5' },
+  { icon: '🏸', label: '50+ Matches', color: '#0fc8b5' },
   { icon: '⭐', label: 'Top Rated', color: '#6366f1' },
   { icon: '🔥', label: '10-Day Streak', color: '#ef4444' },
 ]
 
 const recentActivity = [
-  { id: 1, type: 'booking', icon: '📅', desc: 'Booked Indoor Tennis Court A', time: 'Today, 10:30 AM' },
-  { id: 2, type: 'match', icon: '🎾', desc: 'Won match vs David K. (6-3, 6-4)', time: '2 days ago' },
-  { id: 3, type: 'payment', icon: '💳', desc: 'Paid $45.00 for Court 6', time: '3 days ago' },
-  { id: 4, type: 'rental', icon: '🎿', desc: 'Rented Pro Racket X7 for 1 day', time: 'Last week' },
+  { id: 1, type: 'booking', icon: '📅', desc: 'Booked Sân Cầu lông A', time: 'Today, 10:30 AM' },
+  { id: 2, type: 'match', icon: '🏸', desc: 'Won match vs David K. (21-15, 21-18)', time: '2 days ago' },
+  { id: 3, type: 'payment', icon: '💳', desc: 'Paid 120,000đ for Sân 1', time: '3 days ago' },
+  { id: 4, type: 'rental', icon: '🎿', desc: 'Rented Vợt Yonex Astrox 99 for 1 day', time: 'Last week' },
 ]
 
 export default function ApexProfilePage() {
   const [editing, setEditing] = useState(false)
-  const [form, setForm] = useState({ name: 'Alex Johnson', email: 'alex@prosport.com', phone: '+84 901 234 567', sport: 'Tennis', level: 'Intermediate', bio: 'Passionate tennis player. Looking for competitive doubles partners at the Intermediate–Advanced level.' })
+  const [form, setForm] = useState({ name: 'Alex Johnson', email: 'alex@prosport.com', phone: '+84 901 234 567', sport: 'Badminton', level: 'Intermediate', bio: 'Passionate badminton player. Looking for competitive doubles partners at the Intermediate–Advanced level.' })
   const pageRef = useRef(null)
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function ApexProfilePage() {
                 <div className="profile-field">
                   <label htmlFor="profile-sport">Primary Sport</label>
                   <select id="profile-sport" value={form.sport} onChange={e => setForm({ ...form, sport: e.target.value })} className="profile-input">
-                    {['Tennis', 'Basketball', 'Padel', 'Badminton', 'Squash'].map(s => <option key={s}>{s}</option>)}
+                    {['Badminton', 'Pickleball'].map(s => <option key={s}>{s}</option>)}
                   </select>
                 </div>
                 <div className="profile-field">

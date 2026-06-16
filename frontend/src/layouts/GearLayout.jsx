@@ -49,11 +49,11 @@ export default function GearLayout({ children }) {
           <span className="text-[#0d2d3a]">PRO</span><span className="text-[#0d8a8a]">-</span><span className="text-[#0d2d3a]">SPORT</span>
         </div>
         <nav className="flex gap-5 flex-wrap">
-          <a href="#" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Equipment Catalog</a>
-          <a href="#" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Rental Terms</a>
-          <a href="#" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Maintenance Tracking</a>
-          <a href="#" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Support Hub</a>
-          <a href="#" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Privacy Policy</a>
+          <Link to="/gear/catalog" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Equipment Catalog</Link>
+          <Link to="/gear/rental-terms" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Rental Terms</Link>
+          <Link to="/gear/maintenance" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Maintenance Tracking</Link>
+          <Link to="/gear/support" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Support Hub</Link>
+          <Link to="/gear/privacy" className="text-[0.82rem] text-slate-500 no-underline transition-all hover:text-[#0d8a8a]">Privacy Policy</Link>
         </nav>
         <p className="text-[0.78rem] text-slate-400 ml-auto">© 2024 PRO-SPORT Performance Systems. Engineered for Elite Athletes.</p>
       </footer>

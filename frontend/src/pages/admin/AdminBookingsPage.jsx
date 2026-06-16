@@ -109,7 +109,7 @@ export default function AdminBookingsPage() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {bookings.map((b, i) => (
-                <tr key={i} className="hover:bg-slate-50/55 transition-colors">
+                <tr key={b.id} className="hover:bg-slate-50/55 transition-colors">
                   <td className="px-5 py-4 whitespace-nowrap text-sm font-semibold text-slate-500">{b.id}</td>
                   <td className="px-5 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">

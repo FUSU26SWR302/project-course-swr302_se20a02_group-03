@@ -1,54 +1,54 @@
 -- ============================================================================
--- PRO-SPORT COMPLEX � Database Migration Script (Fixes)
+-- PRO-SPORT COMPLEX — Database Migration Script (Fixes)
 -- Target: Microsoft SQL Server 2019+
 -- Encoding: UTF-8
--- Description: Kh?c ph?c 5 l?i nghi�m tr?ng v� r?i ro m? r?ng trong Schema
+-- Description: Khắc phục 5 lỗi nghiêm trọng và rủi ro mở rộng trong Schema
 -- ============================================================================
 
 USE [ProSportDB];
 GO
 
 -- ============================================================================
--- 1. L?i logic chu?n h�a trong BookingDetails_Equipments
--- V?n ??: X�a Kh�a ngo?i FK_BookingDetailsEquip_Units v� c?t UnitId.
+-- 1. Lỗi logic chuẩn hóa trong BookingDetails_Equipments
+-- Vấn đề: Xóa Khóa ngoại FK_BookingDetailsEquip_Units và cột UnitId.
 -- ============================================================================
--- X�a kh�a ngo?i n?u t?n t?i
+-- Xóa khóa ngoại nếu tồn tại
 IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_BookingDetailsEquip_Units')
 BEGIN
     ALTER TABLE [dbo].[BookingDetails_Equipments] DROP CONSTRAINT [FK_BookingDetailsEquip_Units];
-    PRINT N'?� x�a kh�a ngo?i FK_BookingDetailsEquip_Units.';
+    PRINT N'Đã xóa khóa ngoại FK_BookingDetailsEquip_Units.';
 END
 GO
 
--- X�a c?t UnitId n?u t?n t?i
+-- Xóa cột UnitId nếu tồn tại
 IF COL_LENGTH('dbo.BookingDetails_Equipments', 'UnitId') IS NOT NULL
 BEGIN
     ALTER TABLE [dbo].[BookingDetails_Equipments] DROP COLUMN [UnitId];
-    PRINT N'?� x�a c?t UnitId kh?i b?ng BookingDetails_Equipments.';
+    PRINT N'Đã xóa cột UnitId khỏi bảng BookingDetails_Equipments.';
 END
 GO
 
 -- ============================================================================
--- 2. L?i Deadlock chi?m d?ng s�n v?nh vi?n trong Bookings
--- V?n ??: Th�m c?t PaymentExpiredAt (DATETIME2, cho ph�p NULL) ?? x? l� timeout.
+-- 2. Lỗi Deadlock chiếm dụng sân vĩnh viễn trong Bookings
+-- Vấn đề: Thêm cột PaymentExpiredAt (DATETIME2, cho phép NULL) để xử lý timeout.
 -- ============================================================================
 IF COL_LENGTH('dbo.Bookings', 'PaymentExpiredAt') IS NULL
 BEGIN
     ALTER TABLE [dbo].[Bookings] ADD [PaymentExpiredAt] DATETIME2(7) NULL;
-    PRINT N'?� th�m c?t PaymentExpiredAt v�o b?ng Bookings.';
+    PRINT N'Đã thêm cột PaymentExpiredAt vào bảng Bookings.';
 END
 GO
 
 -- ============================================================================
--- 3. R?i ro thi?u minh b?ch d�ng ti?n h�a ??n trong Bookings
--- V?n ??: Th�m c?t SubTotal v� DiscountAmount (DECIMAL 18,2, m?c ??nh 0).
+-- 3. Rủi ro thiếu minh bạch dòng tiền hóa đơn trong Bookings
+-- Vấn đề: Thêm cột SubTotal và DiscountAmount (DECIMAL 18,2, mặc định 0).
 -- ============================================================================
 IF COL_LENGTH('dbo.Bookings', 'SubTotal') IS NULL
 BEGIN
     ALTER TABLE [dbo].[Bookings] 
     ADD [SubTotal] DECIMAL(18,2) NOT NULL 
     CONSTRAINT [DF_Bookings_SubTotal] DEFAULT (0);
-    PRINT N'?� th�m c?t SubTotal v�o b?ng Bookings.';
+    PRINT N'Đã thêm cột SubTotal vào bảng Bookings.';
 END
 GO
 
@@ -57,13 +57,13 @@ BEGIN
     ALTER TABLE [dbo].[Bookings] 
     ADD [DiscountAmount] DECIMAL(18,2) NOT NULL 
     CONSTRAINT [DF_Bookings_DiscountAmount] DEFAULT (0);
-    PRINT N'?� th�m c?t DiscountAmount v�o b?ng Bookings.';
+    PRINT N'Đã thêm cột DiscountAmount vào bảng Bookings.';
 END
 GO
 
 -- ============================================================================
--- 4. L?i m?t d?u d�ng ti?n k� qu? trong MatchMembers
--- V?n ??: Th�m c?t LockedAmount (DECIMAL 18,2, NOT NULL, DEFAULT 0) v� constraint CHECK >= 0.
+-- 4. Lỗi mất dấu dòng tiền ký quỹ trong MatchMembers
+-- Vấn đề: Thêm cột LockedAmount (DECIMAL 18,2, NOT NULL, DEFAULT 0) và constraint CHECK >= 0.
 -- ============================================================================
 IF COL_LENGTH('dbo.MatchMembers', 'LockedAmount') IS NULL
 BEGIN
@@ -72,30 +72,30 @@ BEGIN
         CONSTRAINT [DF_MatchMembers_LockedAmount] DEFAULT (0)
         CONSTRAINT [CK_MatchMembers_LockedAmount] CHECK ([LockedAmount] >= 0);
     
-    PRINT N'?� th�m c?t LockedAmount v� constraint CK_MatchMembers_LockedAmount v�o b?ng MatchMembers.';
+    PRINT N'Đã thêm cột LockedAmount và constraint CK_MatchMembers_LockedAmount vào bảng MatchMembers.';
 END
 GO
 
 -- ============================================================================
--- 5. Thi?u lo?i ng�y L?/T?t trong PriceMatrix
--- V?n ??: Thay th? constraint CK_PriceMatrix_DayType ?? cho ph�p ('Weekday', 'Weekend', 'Holiday').
+-- 5. Thiếu loại ngày Lễ/Tết trong PriceMatrix
+-- Vấn đề: Thay thế constraint CK_PriceMatrix_DayType để cho phép ('Weekday', 'Weekend', 'Holiday').
 -- ============================================================================
--- X�a constraint c? n?u t?n t?i
+-- Xóa constraint cũ nếu tồn tại
 IF EXISTS (SELECT 1 FROM sys.check_constraints WHERE name = 'CK_PriceMatrix_DayType')
 BEGIN
     ALTER TABLE [dbo].[PriceMatrix] DROP CONSTRAINT [CK_PriceMatrix_DayType];
-    PRINT N'?� x�a constraint CK_PriceMatrix_DayType c?.';
+    PRINT N'Đã xóa constraint CK_PriceMatrix_DayType cũ.';
 END
 GO
 
--- T?o l?i constraint m?i
+-- Tạo lại constraint mới
 IF NOT EXISTS (SELECT 1 FROM sys.check_constraints WHERE name = 'CK_PriceMatrix_DayType')
 BEGIN
     ALTER TABLE [dbo].[PriceMatrix] 
     ADD CONSTRAINT [CK_PriceMatrix_DayType] CHECK ([DayType] IN ('Weekday', 'Weekend', 'Holiday'));
-    PRINT N'?� t?o m?i constraint CK_PriceMatrix_DayType (bao g?m Holiday).';
+    PRINT N'Đã tạo mới constraint CK_PriceMatrix_DayType (bao gồm Holiday).';
 END
 GO
 
-PRINT N'? ?� ch?y th�nh c�ng Migration Script kh?c ph?c 5 v?n ?? Schema.';
+PRINT N'✅ Đã chạy thành công Migration Script khắc phục 5 vấn đề Schema.';
 GO

@@ -68,8 +68,7 @@ public class AuthService : IAuthService
                     Email = request.Email,
                     PasswordHash = BC.HashPassword(request.Password),
                     PhoneNumber = request.PhoneNumber,
-                    Role = "Customer",
-                    CreatedAt = DateTime.UtcNow
+                    Role = "Customer"
                 };
 
                 userToProcess = await _userRepository.CreateAsync(user);
@@ -82,8 +81,7 @@ public class AuthService : IAuthService
                 UserId = userToProcess.UserId,
                 Code = otpCode,
                 Type = "Register",
-                ExpiryTime = DateTime.UtcNow.AddMinutes(5),
-                CreatedAt = DateTime.UtcNow
+                ExpiryTime = DateTime.UtcNow.AddMinutes(5)
             });
             
             // SEND REAL EMAIL
@@ -123,8 +121,7 @@ public class AuthService : IAuthService
                 UserId = user.UserId,
                 Code = otpCode,
                 Type = request.Type,
-                ExpiryTime = DateTime.UtcNow.AddMinutes(5),
-                CreatedAt = DateTime.UtcNow
+                ExpiryTime = DateTime.UtcNow.AddMinutes(5)
             });
 
             string emailBody = $@"
@@ -207,8 +204,7 @@ public class AuthService : IAuthService
                     GoogleId = payload.Subject,
                     Role = "Customer",
                     AvatarUrl = payload.Picture,
-                    EKycStatus = "Verified", // Google accounts are considered verified
-                    CreatedAt = DateTime.UtcNow
+                    EKycStatus = "Verified" // Google accounts are considered verified
                 };
                 user = await _userRepository.CreateAsync(user);
             }
@@ -242,7 +238,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            Console.WriteLine($"[VerifyOtp] Received Request - UserId: {request.UserId}, Email: {request.Email}, OtpCode: {request.OtpCode}, Type: {request.Type}");
+            _logger.LogInformation("[VerifyOtp] Received Request - UserId: {UserId}, Email: {Email}, Type: {Type}", request.UserId, request.Email, request.Type);
             
             int userId = request.UserId;
             if (userId == 0 && !string.IsNullOrEmpty(request.Email))
@@ -256,13 +252,13 @@ public class AuthService : IAuthService
             
             if (otp == null)
             {
-                Console.WriteLine($"[VerifyOtp] No valid OTP found in DB for UserId: {userId}");
+                _logger.LogWarning("[VerifyOtp] No valid OTP found in DB for UserId: {UserId}", userId);
                 return new ApiResponseDto<bool>(400, "Invalid or expired OTP.", false);
             }
 
             if (otp.Code != request.OtpCode)
             {
-                Console.WriteLine($"[VerifyOtp] OTP Code mismatch. Expected: {otp.Code}, Received: {request.OtpCode}");
+                _logger.LogWarning("[VerifyOtp] OTP Code mismatch for UserId: {UserId}", userId);
                 return new ApiResponseDto<bool>(400, "Invalid or expired OTP.", false);
             }
 
@@ -278,7 +274,7 @@ public class AuthService : IAuthService
             }
             // For ResetPassword, we do NOT burn the OTP here. We burn it in ResetPasswordAsync.
 
-            Console.WriteLine($"[VerifyOtp] Success!");
+            _logger.LogInformation("[VerifyOtp] Success for UserId: {UserId}", userId);
             return new ApiResponseDto<bool>(200, "OTP verified successfully.", true);
         }
         catch (Exception ex)
@@ -350,8 +346,7 @@ public class AuthService : IAuthService
                 UserId = user.UserId,
                 Code = otpCode,
                 Type = "ResetPassword",
-                ExpiryTime = DateTime.UtcNow.AddMinutes(5),
-                CreatedAt = DateTime.UtcNow
+                ExpiryTime = DateTime.UtcNow.AddMinutes(5)
             });
 
             // SEND REAL EMAIL
@@ -431,5 +426,31 @@ public class AuthService : IAuthService
     private string GenerateOtp()
     {
         return System.Security.Cryptography.RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
+    }
+
+    public async Task<ApiResponseDto<AuthResponseDto>> GetProfileAsync(int userId)
+    {
+        try
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return new ApiResponseDto<AuthResponseDto>(404, "User not found.");
+
+            return new ApiResponseDto<AuthResponseDto>(200, "Success", new AuthResponseDto
+            {
+                UserId = user.UserId,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = user.Role,
+                AccessToken = "", // Not needed for profile fetch
+                IsProfileComplete = !string.IsNullOrEmpty(user.PhoneNumber),
+                AvatarUrl = user.AvatarUrl
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting profile for UserId: {UserId}", userId);
+            return new ApiResponseDto<AuthResponseDto>(500, "An unexpected error occurred.");
+        }
     }
 }

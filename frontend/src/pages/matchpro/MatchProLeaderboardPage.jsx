@@ -4,22 +4,22 @@ import MatchProLayout from '../../layouts/MatchProLayout'
 import './MatchProLeaderboardPage.css'
 
 const periods = ['This Week', 'This Month', 'All Time']
-const sports = ['All Sports', 'Tennis', 'Padel', 'Basketball', 'Badminton', 'Soccer']
+const sports = ['All Sports', 'Badminton', 'Pickleball']
 
 const players = [
-  { rank: 1, name: 'David K.', pts: 2450, wins: 34, matches: 40, sport: 'Tennis', level: 'Pro', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80', change: 0 },
-  { rank: 2, name: 'Jessica W.', pts: 2100, wins: 28, matches: 35, sport: 'Padel', level: 'Advanced', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&q=80', change: 1 },
-  { rank: 3, name: 'Marcus T.', pts: 1980, wins: 25, matches: 33, sport: 'Tennis', level: 'Advanced', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80', change: -1 },
-  { rank: 4, name: 'Sarah J.', pts: 1750, wins: 22, matches: 30, sport: 'Padel', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80', change: 2 },
-  { rank: 5, name: 'Jae Kim', pts: 1620, wins: 20, matches: 28, sport: 'Basketball', level: 'Advanced', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80', change: 0 },
-  { rank: 6, name: 'Alex M.', pts: 1540, wins: 19, matches: 27, sport: 'Tennis', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80', change: -2 },
+  { rank: 1, name: 'David K.', pts: 2450, wins: 34, matches: 40, sport: 'Badminton', level: 'Pro', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80', change: 0 },
+  { rank: 2, name: 'Jessica W.', pts: 2100, wins: 28, matches: 35, sport: 'Pickleball', level: 'Advanced', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&q=80', change: 1 },
+  { rank: 3, name: 'Marcus T.', pts: 1980, wins: 25, matches: 33, sport: 'Badminton', level: 'Advanced', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80', change: -1 },
+  { rank: 4, name: 'Sarah J.', pts: 1750, wins: 22, matches: 30, sport: 'Pickleball', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80', change: 2 },
+  { rank: 5, name: 'Jae Kim', pts: 1620, wins: 20, matches: 28, sport: 'Badminton', level: 'Advanced', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80', change: 0 },
+  { rank: 6, name: 'Alex M.', pts: 1540, wins: 19, matches: 27, sport: 'Pickleball', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80', change: -2 },
   { rank: 7, name: 'Elena R.', pts: 1420, wins: 17, matches: 25, sport: 'Badminton', level: 'Advanced', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&q=80', change: 1 },
-  { rank: 8, name: 'Chris N.', pts: 1380, wins: 16, matches: 24, sport: 'Soccer', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=80&q=80', change: 0 },
+  { rank: 8, name: 'Chris N.', pts: 1380, wins: 16, matches: 24, sport: 'Pickleball', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=80&q=80', change: 0 },
   { rank: 9, name: 'Mia S.', pts: 1250, wins: 14, matches: 22, sport: 'Badminton', level: 'Intermediate', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&q=80', change: 3 },
-  { rank: 10, name: 'Tom B.', pts: 1190, wins: 13, matches: 21, sport: 'Basketball', level: 'Beginner', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80', change: -1 },
+  { rank: 10, name: 'Tom B.', pts: 1190, wins: 13, matches: 21, sport: 'Pickleball', level: 'Beginner', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=80', change: -1 },
 ]
 
-const sportColors = { Tennis: '#0fc8b5', Padel: '#6366f1', Basketball: '#f59e0b', Badminton: '#22c55e', Soccer: '#ef4444', All: '#0d8a8a' }
+const sportColors = { Badminton: '#22c55e', Pickleball: '#6366f1', All: '#0d8a8a' }
 
 export default function MatchProLeaderboardPage() {
   const [period, setPeriod] = useState('This Week')
